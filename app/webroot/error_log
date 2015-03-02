@@ -1,0 +1,111 @@
+[03-Aug-2014 06:48:08 America/Chicago] PHP Parse error:  syntax error, unexpected '}' in /home4/trilord/public_html/beta/app/View/Pages/home.ctp on line 360
+[27-Aug-2014 02:42:48 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::getCompanySuggestionList() in /home4/trilord/public_html/beta/app/Controller/UsersController.php on line 1617
+[27-Aug-2014 02:43:48 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::getCompanySuggestionList() in /home4/trilord/public_html/beta/app/Controller/UsersController.php on line 1617
+[27-Aug-2014 02:45:00 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::getCompanySuggestionList() in /home4/trilord/public_html/beta/app/Controller/UsersController.php on line 1617
+[29-Aug-2014 00:37:56 America/Chicago] PHP Parse error:  syntax error, unexpected '{' in /home4/trilord/public_html/beta/app/View/Users/confirm_message.ctp on line 57
+[29-Aug-2014 00:39:45 America/Chicago] PHP Parse error:  syntax error, unexpected '{' in /home4/trilord/public_html/beta/app/View/Users/confirm_message.ctp on line 57
+[01-Sep-2014 02:49:53 America/Chicago] PHP Parse error:  syntax error, unexpected '$userId' (T_VARIABLE) in /home4/trilord/public_html/beta/app/View/Helper/SmartFormHelper.php on line 21
+[01-Sep-2014 02:50:18 America/Chicago] PHP Parse error:  syntax error, unexpected '{' in /home4/trilord/public_html/beta/app/View/Helper/SmartFormHelper.php on line 21
+[02-Sep-2014 01:03:13 America/Chicago] PHP Parse error:  syntax error, unexpected 'if' (T_IF), expecting function (T_FUNCTION) in /home4/trilord/public_html/beta/app/Controller/UsersController.php on line 652
+[02-Sep-2014 01:03:14 America/Chicago] PHP Parse error:  syntax error, unexpected 'if' (T_IF), expecting function (T_FUNCTION) in /home4/trilord/public_html/beta/app/Controller/UsersController.php on line 652
+[02-Sep-2014 02:21:27 America/Chicago] PHP Fatal error:  Class 'CakeEmail' not found in /home4/trilord/public_html/beta/app/Controller/TestimonialsController.php on line 83
+[02-Sep-2014 04:05:52 America/Chicago] PHP Warning:  Unterminated comment starting line 701 in /home4/trilord/public_html/beta/app/Plugin/Paypal/Lib/Paypal.php on line 701
+[02-Sep-2014 04:05:52 America/Chicago] PHP Parse error:  syntax error, unexpected end of file, expecting function (T_FUNCTION) in /home4/trilord/public_html/beta/app/Plugin/Paypal/Lib/Paypal.php on line 704
+[03-Sep-2014 06:11:01 America/Chicago] PHP Fatal error:  Call to a member function subject() on a non-object in /home4/trilord/public_html/beta/app/Controller/SeekerProviderRequestsController.php on line 239
+[03-Sep-2014 06:11:19 America/Chicago] PHP Fatal error:  Call to a member function subject() on a non-object in /home4/trilord/public_html/beta/app/Controller/SeekerProviderRequestsController.php on line 239
+[03-Sep-2014 06:12:02 America/Chicago] PHP Fatal error:  Class 'AppHelper' not found in /home4/trilord/public_html/beta/lib/Cake/View/Helper/SessionHelper.php on line 30
+[03-Sep-2014 06:12:02 America/Chicago] PHP Fatal error:  Class 'AppHelper' not found in /home4/trilord/public_html/beta/lib/Cake/View/Helper/HtmlHelper.php on line 32
+[03-Sep-2014 06:13:54 America/Chicago] PHP Fatal error:  Call to a member function subject() on a non-object in /home4/trilord/public_html/beta/app/Controller/SeekerProviderRequestsController.php on line 239
+[04-Sep-2014 02:09:17 America/Chicago] PHP Fatal error:  Call to a member function subject() on a non-object in /home4/trilord/public_html/beta/app/Controller/SeekerProviderRequestsController.php on line 239
+[04-Sep-2014 02:14:36 America/Chicago] PHP Fatal error:  Call to a member function subject() on a non-object in /home4/trilord/public_html/beta/app/Controller/SeekerProviderRequestsController.php on line 239
+[04-Sep-2014 02:16:15 America/Chicago] PHP Fatal error:  Call to a member function subject() on a non-object in /home4/trilord/public_html/beta/app/Controller/SeekerProviderRequestsController.php on line 286
+[04-Sep-2014 02:19:15 America/Chicago] PHP Fatal error:  Call to a member function subject() on a non-object in /home4/trilord/public_html/beta/app/Controller/SeekerProviderRequestsController.php on line 239
+[04-Sep-2014 02:27:53 America/Chicago] PHP Fatal error:  Call to a member function subject() on a non-object in /home4/trilord/public_html/beta/app/Controller/SeekerProviderRequestsController.php on line 286
+[04-Sep-2014 02:28:45 America/Chicago] PHP Fatal error:  Call to a member function subject() on a non-object in /home4/trilord/public_html/beta/app/Controller/SeekerProviderRequestsController.php on line 286
+[04-Sep-2014 02:29:38 America/Chicago] PHP Fatal error:  Call to a member function subject() on a non-object in /home4/trilord/public_html/beta/app/Controller/SeekerProviderRequestsController.php on line 286
+[19-Sep-2014 00:19:14 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::PlaceSuggestionList() in /home4/trilord/public_html/app/Controller/UsersController.php on line 2001
+[19-Sep-2014 00:19:29 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::PlaceSuggestionList() in /home4/trilord/public_html/app/Controller/UsersController.php on line 2001
+[19-Sep-2014 00:19:30 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::PlaceSuggestionList() in /home4/trilord/public_html/app/Controller/UsersController.php on line 2001
+[19-Sep-2014 00:19:31 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::PlaceSuggestionList() in /home4/trilord/public_html/app/Controller/UsersController.php on line 2001
+[19-Sep-2014 00:19:33 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::PlaceSuggestionList() in /home4/trilord/public_html/app/Controller/UsersController.php on line 2001
+[19-Sep-2014 00:19:33 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::PlaceSuggestionList() in /home4/trilord/public_html/app/Controller/UsersController.php on line 2001
+[19-Sep-2014 00:19:39 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::PlaceSuggestionList() in /home4/trilord/public_html/app/Controller/UsersController.php on line 2001
+[19-Sep-2014 00:23:27 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::PlaceSuggestionList() in /home4/trilord/public_html/app/Controller/UsersController.php on line 2001
+[19-Sep-2014 00:24:04 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::PlaceSuggestionList() in /home4/trilord/public_html/app/Controller/UsersController.php on line 2001
+[19-Sep-2014 01:01:25 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::PlaceSuggestionList() in /home4/trilord/public_html/app/Controller/UsersController.php on line 2002
+[19-Sep-2014 01:02:11 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::PlaceSuggestionList() in /home4/trilord/public_html/app/Controller/UsersController.php on line 2002
+[19-Sep-2014 01:03:52 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::PlaceSuggestionList() in /home4/trilord/public_html/app/Controller/UsersController.php on line 2003
+[19-Sep-2014 01:03:52 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::PlaceSuggestionList() in /home4/trilord/public_html/app/Controller/UsersController.php on line 2003
+[19-Sep-2014 01:03:54 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::PlaceSuggestionList() in /home4/trilord/public_html/app/Controller/UsersController.php on line 2003
+[19-Sep-2014 01:03:55 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::PlaceSuggestionList() in /home4/trilord/public_html/app/Controller/UsersController.php on line 2003
+[19-Sep-2014 01:04:08 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::PlaceSuggestionList() in /home4/trilord/public_html/app/Controller/UsersController.php on line 2003
+[19-Sep-2014 01:04:26 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::PlaceSuggestionList() in /home4/trilord/public_html/app/Controller/UsersController.php on line 2003
+[19-Sep-2014 01:04:27 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::PlaceSuggestionList() in /home4/trilord/public_html/app/Controller/UsersController.php on line 2003
+[19-Sep-2014 01:04:28 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::PlaceSuggestionList() in /home4/trilord/public_html/app/Controller/UsersController.php on line 2003
+[19-Sep-2014 01:04:30 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::PlaceSuggestionList() in /home4/trilord/public_html/app/Controller/UsersController.php on line 2003
+[19-Sep-2014 01:04:31 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::PlaceSuggestionList() in /home4/trilord/public_html/app/Controller/UsersController.php on line 2003
+[19-Sep-2014 01:06:52 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::PlaceSuggestionList() in /home4/trilord/public_html/app/Controller/UsersController.php on line 2003
+[19-Sep-2014 01:06:53 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::PlaceSuggestionList() in /home4/trilord/public_html/app/Controller/UsersController.php on line 2003
+[19-Sep-2014 01:06:55 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::PlaceSuggestionList() in /home4/trilord/public_html/app/Controller/UsersController.php on line 2003
+[19-Sep-2014 01:06:56 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::PlaceSuggestionList() in /home4/trilord/public_html/app/Controller/UsersController.php on line 2003
+[19-Sep-2014 01:06:58 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::PlaceSuggestionList() in /home4/trilord/public_html/app/Controller/UsersController.php on line 2003
+[19-Sep-2014 01:06:59 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::PlaceSuggestionList() in /home4/trilord/public_html/app/Controller/UsersController.php on line 2003
+[19-Sep-2014 01:07:12 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::PlaceSuggestionList() in /home4/trilord/public_html/app/Controller/UsersController.php on line 2003
+[19-Sep-2014 01:07:13 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::PlaceSuggestionList() in /home4/trilord/public_html/app/Controller/UsersController.php on line 2003
+[19-Sep-2014 01:07:20 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::PlaceSuggestionList() in /home4/trilord/public_html/app/Controller/UsersController.php on line 2003
+[19-Sep-2014 01:07:21 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::PlaceSuggestionList() in /home4/trilord/public_html/app/Controller/UsersController.php on line 2003
+[19-Sep-2014 01:07:23 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::PlaceSuggestionList() in /home4/trilord/public_html/app/Controller/UsersController.php on line 2003
+[19-Sep-2014 01:07:26 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::PlaceSuggestionList() in /home4/trilord/public_html/app/Controller/UsersController.php on line 2003
+[19-Sep-2014 01:07:28 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::PlaceSuggestionList() in /home4/trilord/public_html/app/Controller/UsersController.php on line 2003
+[19-Sep-2014 01:07:29 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::PlaceSuggestionList() in /home4/trilord/public_html/app/Controller/UsersController.php on line 2003
+[19-Sep-2014 01:07:30 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::PlaceSuggestionList() in /home4/trilord/public_html/app/Controller/UsersController.php on line 2003
+[19-Sep-2014 01:07:31 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::PlaceSuggestionList() in /home4/trilord/public_html/app/Controller/UsersController.php on line 2003
+[19-Sep-2014 01:07:31 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::PlaceSuggestionList() in /home4/trilord/public_html/app/Controller/UsersController.php on line 2003
+[19-Sep-2014 01:07:31 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::PlaceSuggestionList() in /home4/trilord/public_html/app/Controller/UsersController.php on line 2003
+[19-Sep-2014 01:08:43 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::PlaceSuggestionList() in /home4/trilord/public_html/app/Controller/UsersController.php on line 2003
+[19-Sep-2014 01:08:43 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::PlaceSuggestionList() in /home4/trilord/public_html/app/Controller/UsersController.php on line 2003
+[19-Sep-2014 01:08:57 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::PlaceSuggestionList() in /home4/trilord/public_html/app/Controller/UsersController.php on line 2003
+[19-Sep-2014 01:09:01 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::PlaceSuggestionList() in /home4/trilord/public_html/app/Controller/UsersController.php on line 2003
+[19-Sep-2014 01:09:06 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::PlaceSuggestionList() in /home4/trilord/public_html/app/Controller/UsersController.php on line 2003
+[21-Dec-2014 00:29:58 America/Chicago] PHP Parse error:  syntax error, unexpected end of file in /home4/trilord/public_html/app/Controller/UsersController.php on line 1418
+[21-Dec-2014 00:31:01 America/Chicago] PHP Parse error:  syntax error, unexpected end of file, expecting variable (T_VARIABLE) or ${ (T_DOLLAR_OPEN_CURLY_BRACES) or {$ (T_CURLY_OPEN) in /home4/trilord/public_html/app/Controller/UsersController.php on line 315
+[21-Dec-2014 00:31:55 America/Chicago] PHP Parse error:  syntax error, unexpected end of file, expecting variable (T_VARIABLE) or ${ (T_DOLLAR_OPEN_CURLY_BRACES) or {$ (T_CURLY_OPEN) in /home4/trilord/public_html/app/Controller/UsersController.php on line 315
+[12-Jan-2015 10:17:39 America/Chicago] PHP Parse error:  syntax error, unexpected '<' in /home4/trilord/public_html/app/View/SeekerProviderRequests/add.ctp on line 66
+[12-Jan-2015 10:17:43 America/Chicago] PHP Parse error:  syntax error, unexpected '<' in /home4/trilord/public_html/app/View/SeekerProviderRequests/add.ctp on line 66
+[12-Jan-2015 10:17:53 America/Chicago] PHP Parse error:  syntax error, unexpected '<' in /home4/trilord/public_html/app/View/SeekerProviderRequests/add.ctp on line 66
+[12-Jan-2015 10:17:53 America/Chicago] PHP Parse error:  syntax error, unexpected '<' in /home4/trilord/public_html/app/View/SeekerProviderRequests/add.ctp on line 66
+[12-Jan-2015 10:22:12 America/Chicago] PHP Parse error:  syntax error, unexpected '<' in /home4/trilord/public_html/app/View/SeekerProviderRequests/add.ctp on line 66
+[12-Jan-2015 10:22:14 America/Chicago] PHP Parse error:  syntax error, unexpected '<' in /home4/trilord/public_html/app/View/SeekerProviderRequests/add.ctp on line 66
+[12-Jan-2015 10:22:14 America/Chicago] PHP Parse error:  syntax error, unexpected '<' in /home4/trilord/public_html/app/View/SeekerProviderRequests/add.ctp on line 66
+[12-Jan-2015 23:51:09 America/Chicago] PHP Parse error:  syntax error, unexpected '<' in /home4/trilord/public_html/app/View/SeekerProviderRequests/add.ctp on line 66
+[12-Jan-2015 23:51:11 America/Chicago] PHP Parse error:  syntax error, unexpected '<' in /home4/trilord/public_html/app/View/SeekerProviderRequests/add.ctp on line 66
+[12-Jan-2015 23:51:11 America/Chicago] PHP Parse error:  syntax error, unexpected '<' in /home4/trilord/public_html/app/View/SeekerProviderRequests/add.ctp on line 66
+[06-Feb-2015 10:09:35 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::getCompanyName() in /home4/trilord/public_html/app/Controller/SeekerProviderRequestsController.php on line 27
+[06-Feb-2015 10:25:56 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::getCompanyName() in /home4/trilord/public_html/app/Controller/SeekerProviderRequestsController.php on line 27
+[06-Feb-2015 10:26:41 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::getCompanyName() in /home4/trilord/public_html/app/Controller/SeekerProviderRequestsController.php on line 27
+[06-Feb-2015 10:27:55 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::getCompanyName() in /home4/trilord/public_html/app/Controller/SeekerProviderRequestsController.php on line 27
+[06-Feb-2015 10:29:30 America/Chicago] PHP Fatal error:  Call to undefined method UsefulComponent::getCompanyName() in /home4/trilord/public_html/app/Controller/SeekerProviderRequestsController.php on line 27
+[09-Feb-2015 06:53:52 America/Chicago] PHP Fatal error:  Call to undefined function array_column() in /home4/trilord/public_html/app/View/Elements/Sections/search_filter.ctp on line 8
+[09-Feb-2015 06:53:52 America/Chicago] PHP Fatal error:  Call to undefined function array_column() in /home4/trilord/public_html/app/View/Elements/Sections/search_filter.ctp on line 8
+[09-Feb-2015 06:53:53 America/Chicago] PHP Fatal error:  Call to undefined function array_column() in /home4/trilord/public_html/app/View/Elements/Sections/search_filter.ctp on line 8
+[09-Feb-2015 06:53:53 America/Chicago] PHP Fatal error:  Call to undefined function array_column() in /home4/trilord/public_html/app/View/Elements/Sections/search_filter.ctp on line 8
+[09-Feb-2015 06:53:56 America/Chicago] PHP Fatal error:  Call to undefined function array_column() in /home4/trilord/public_html/app/View/Elements/Sections/search_filter.ctp on line 8
+[09-Feb-2015 06:53:56 America/Chicago] PHP Fatal error:  Call to undefined function array_column() in /home4/trilord/public_html/app/View/Elements/Sections/search_filter.ctp on line 8
+[09-Feb-2015 06:54:12 America/Chicago] PHP Fatal error:  Call to undefined function array_column() in /home4/trilord/public_html/app/View/Elements/Sections/search_filter.ctp on line 8
+[09-Feb-2015 06:54:12 America/Chicago] PHP Fatal error:  Call to undefined function array_column() in /home4/trilord/public_html/app/View/Elements/Sections/search_filter.ctp on line 8
+[09-Feb-2015 06:54:13 America/Chicago] PHP Fatal error:  Call to undefined function array_column() in /home4/trilord/public_html/app/View/Elements/Sections/search_filter.ctp on line 8
+[09-Feb-2015 06:54:13 America/Chicago] PHP Fatal error:  Call to undefined function array_column() in /home4/trilord/public_html/app/View/Elements/Sections/search_filter.ctp on line 8
+[09-Feb-2015 06:54:15 America/Chicago] PHP Fatal error:  Call to undefined function array_column() in /home4/trilord/public_html/app/View/Elements/Sections/search_filter.ctp on line 8
+[09-Feb-2015 06:54:15 America/Chicago] PHP Fatal error:  Call to undefined function array_column() in /home4/trilord/public_html/app/View/Elements/Sections/search_filter.ctp on line 8
+[09-Feb-2015 06:58:09 America/Chicago] PHP Fatal error:  Call to undefined function array_column() in /home4/trilord/public_html/app/View/Elements/Sections/search_filter.ctp on line 8
+[09-Feb-2015 06:58:09 America/Chicago] PHP Fatal error:  Call to undefined function array_column() in /home4/trilord/public_html/app/View/Elements/Sections/search_filter.ctp on line 8
+[09-Feb-2015 06:58:10 America/Chicago] PHP Fatal error:  Call to undefined function array_column() in /home4/trilord/public_html/app/View/Elements/Sections/search_filter.ctp on line 8
+[09-Feb-2015 06:58:10 America/Chicago] PHP Fatal error:  Call to undefined function array_column() in /home4/trilord/public_html/app/View/Elements/Sections/search_filter.ctp on line 8
+[09-Feb-2015 06:58:13 America/Chicago] PHP Fatal error:  Call to undefined function array_column() in /home4/trilord/public_html/app/View/Elements/Sections/search_filter.ctp on line 8
+[09-Feb-2015 06:58:13 America/Chicago] PHP Fatal error:  Call to undefined function array_column() in /home4/trilord/public_html/app/View/Elements/Sections/search_filter.ctp on line 8
+[09-Feb-2015 06:58:24 America/Chicago] PHP Fatal error:  Call to undefined function array_column() in /home4/trilord/public_html/app/View/Elements/Sections/search_filter.ctp on line 8
+[09-Feb-2015 06:58:24 America/Chicago] PHP Fatal error:  Call to undefined function array_column() in /home4/trilord/public_html/app/View/Elements/Sections/search_filter.ctp on line 8
+[09-Feb-2015 06:58:28 America/Chicago] PHP Fatal error:  Call to undefined function array_column() in /home4/trilord/public_html/app/View/Elements/Sections/search_filter.ctp on line 8
+[09-Feb-2015 06:58:28 America/Chicago] PHP Fatal error:  Call to undefined function array_column() in /home4/trilord/public_html/app/View/Elements/Sections/search_filter.ctp on line 8
+[09-Feb-2015 06:58:40 America/Chicago] PHP Fatal error:  Call to undefined function array_column() in /home4/trilord/public_html/app/View/Elements/Sections/search_filter.ctp on line 8
+[09-Feb-2015 06:58:40 America/Chicago] PHP Fatal error:  Call to undefined function array_column() in /home4/trilord/public_html/app/View/Elements/Sections/search_filter.ctp on line 8

@@ -1,0 +1,36 @@
+2014-07-25 15:54:31 Error: [MissingControllerException] Controller class CssController could not be found.
+Exception Attributes: array (
+  'class' => 'CssController',
+  'plugin' => NULL,
+)
+Request URL: /trilord-demo/css/magnific-popup.css
+Stack Trace:
+#0 /home/mahuwac/public_html/trilord-demo/app/webroot/index.php(108): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2014-07-25 15:54:33 Error: [MissingControllerException] Controller class FontsController could not be found.
+Exception Attributes: array (
+  'class' => 'FontsController',
+  'plugin' => NULL,
+)
+Request URL: /trilord-demo/fonts/fontawesome-webfont.woff?v=4.0.3
+Stack Trace:
+#0 /home/mahuwac/public_html/trilord-demo/app/webroot/index.php(108): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2014-07-25 15:54:46 Error: [MissingControllerException] Controller class CssController could not be found.
+Exception Attributes: array (
+  'class' => 'CssController',
+  'plugin' => NULL,
+)
+Request URL: /trilord-demo/css/magnific-popup.css
+Stack Trace:
+#0 /home/mahuwac/public_html/trilord-demo/app/webroot/index.php(108): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2014-07-25 15:54:49 Error: [MissingControllerException] Controller class FontsController could not be found.
+Exception Attributes: array (
+  'class' => 'FontsController',
+  'plugin' => NULL,
+)
+Request URL: /trilord-demo/fonts/fontawesome-webfont.woff?v=4.0.3
+Stack Trace:
+#0 /home/mahuwac/public_html/trilord-demo/app/webroot/index.php(108): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
