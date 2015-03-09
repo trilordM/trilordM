@@ -1,5 +1,6 @@
 <div class="col-md-9 col-xs-12 user-profile-content right-column">
     <?php echo $this->Session->flash(); ?>
+
 		<div class="row">
 			<div class="col-md-2 col-xs-12">
 
@@ -89,5 +90,6 @@
                         </div>
                     </div>
                     <!-- /.row -->
-</div> <!-- end .grid .right-column -->
+
+</div> <!-- end .grid .right-column .user-profile-content -->
 

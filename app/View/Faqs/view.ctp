@@ -1,5 +1,4 @@
 <div class="faq-container">
-         <?php $base_url = SITE_URL . "trilod/";?>
         <div class="title-container"><!-- start main page title -->
 			<div class="container">
 				<div class="page-title">FAQS > <?php echo $type=='provider'?"Service Provider":"Customer"?></div>
@@ -54,9 +53,9 @@
                                        <i class="fa fa-check-square-o">Register with us</i>
                                       </button>
                                       <ul class="dropdown-menu" role="menu">
-                                         <li><a href="<?php echo $base_url.'seeker_register'?>">Service Seeker</a></li>
-                                         <li><a href="<?php echo $base_url.'provider_register?type=company'?>">Service Provider Company</a></li>
-                                         <li><a href="<?php echo $base_url.'provider_register?type=individual'?>">Individual Service Provider</a></li>
+                                         <li><a href="<?php echo SITE_URL.'seeker_register'?>">Service Seeker</a></li>
+                                         <li><a href="<?php echo SITE_URL.'provider_register?type=company'?>">Service Provider Company</a></li>
+                                         <li><a href="<?php echo SITE_URL.'provider_register?type=individual'?>">Individual Service Provider</a></li>
 
                                       </ul>
                                     </div>

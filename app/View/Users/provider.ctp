@@ -112,7 +112,9 @@
                     </div><!-- end .shortcodes .col-sm-12 grid-layout-->
 
                 </div> <!-- end .col-sm-8 grid layout -->
-
+                
+                <?php if(!AuthComponent::User()):?>
+               
                  <div class="col-md-4 col-sm-12 col-xs-12">
                       <div class ="price-listing">
                           <div class="pricing-table active">
@@ -131,9 +133,9 @@
                                <i class="fa fa-check-square-o">Register with us</i>
                               </button>
                               <ul class="dropdown-menu" role="menu">
-                                 <li><a href="<?php echo $base_url.'seeker_register'?>">Service Seeker</a></li>
-                                 <li><a href="<?php echo $base_url.'provider_register?type=company'?>">Service Provider Company</a></li>
-                                 <li><a href="<?php echo $base_url.'provider_register?type=individual'?>">Individual Service Provider</a></li>
+                                 <li><a href="<?php echo SITE_URL.'seeker_register'?>">Service Seeker</a></li>
+                                 <li><a href="<?php echo SITE_URL.'provider_register?type=company'?>">Service Provider Company</a></li>
+                                 <li><a href="<?php echo SITE_URL.'provider_register?type=individual'?>">Individual Service Provider</a></li>
 
                               </ul>
                             </div><!-- end .btn-group -->
@@ -141,11 +143,12 @@
 
                       </div> <!-- end .price-listing-->
 
-                </div> <!-- end .col-sm-12 grid-layout -->
+                </div> 
+            <?php endif;?><!-- end .col-sm-12 grid-layout -->
+               
 
 
             </div><!-- end .row-->
 </div>  <!-- end .provider-detail-page -->
-
 
 

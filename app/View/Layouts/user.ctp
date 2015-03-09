@@ -30,11 +30,13 @@
 
     <?php echo $this->element('Sections/header')?>
     <div class = "row service-seeker-admin-container">
+
         <div class="col-md-12 col-xs-12 title-container"><!-- start .title-container -->
             <div class="container">
                 <div class="page-title"><?php echo $page_title ?></div>
             </div>
         </div><!-- end .title-container -->
+
         <div class = "container">
             <?php echo $this->element('user/left_menu')?>
             <?php echo $this->fetch('content')?>

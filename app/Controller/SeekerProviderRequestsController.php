@@ -18,8 +18,14 @@ class SeekerProviderRequestsController extends AppController
      * @var array
      */
     public $components = array('Paginator', 'Useful', 'SparrowSMS');
+    /**
+     * @var string
+     */
     private $companyName = '';
 
+    /**
+     *
+     */
     public function beforeFilter()
     {
 
@@ -40,6 +46,9 @@ class SeekerProviderRequestsController extends AppController
     }
 
     //This action is used to view more service history in seeker profile
+    /**
+     * @param null $status
+     */
     public function service_history($status = null)
     {
         //debug($status);die;
@@ -56,13 +65,20 @@ class SeekerProviderRequestsController extends AppController
             $this->Paginator->settings = array('order' => array('assigned_date' => ' desc'), 'limit' => 6);
             $assigned = "class = 'active'";
         }
-        $service_history = $this->Paginator->paginate(array('service_seeker_id' => $this->Auth->User('id'), 'status' => $status));
+        $service_history = $this->Paginator->paginate(array(
+            'service_seeker_id' => $this->Auth->User('id'),
+            'status' => $status
+        ));
 
-        $this->set('service_history', $service_history );
+        $this->set('service_history', $service_history);
         $hideSearchBar = true;
-        $this->set(compact('completed','new','assigned','status', 'page_title', 'hideSearchBar'));
+        $this->set(compact('completed', 'new', 'assigned', 'status', 'page_title', 'hideSearchBar'));
     }
 
+    /**
+     * @param null $id
+     * @param null $status
+     */
     public function admin_service_history($id = null, $status = null)
     {
         $this->SeekerProviderRequest->recursive = 0;
@@ -74,10 +90,15 @@ class SeekerProviderRequestsController extends AppController
             $this->Paginator->settings = array('order' => array('assigned_date' => ' desc'));
         }
         //debug($this->Paginator->paginate(array('service_seeker_id'=>$this->Auth->User('id'))));die;
-        $this->set('service_history', $this->Paginator->paginate(array('service_seeker_id' => $id, 'status' => $status)));
+        $this->set('service_history',
+            $this->Paginator->paginate(array('service_seeker_id' => $id, 'status' => $status)));
         $this->set(compact('status'));
     }
 
+    /**
+     * @param null $id
+     * @param null $status
+     */
     public function provider_service_history($id = null, $status = null)
     {
         $this->SeekerProviderRequest->recursive = 0;
@@ -90,10 +111,15 @@ class SeekerProviderRequestsController extends AppController
         }
         //debug($this->Paginator->paginate(array('service_seeker_id'=>$this->Auth->User('id'))));die;
 
-        $this->set('service_history', $this->Paginator->paginate(array('service_provider_id' => $id, 'status' => $status)));
+        $this->set('service_history',
+            $this->Paginator->paginate(array('service_provider_id' => $id, 'status' => $status)));
         $this->set(compact('status'));
     }
 
+    /**
+     * @param null $id
+     * @param null $status
+     */
     public function admin_provider_service_history($id = null, $status = null)
     {
         $this->SeekerProviderRequest->recursive = 0;
@@ -106,7 +132,8 @@ class SeekerProviderRequestsController extends AppController
         }
         //debug($this->Paginator->paginate(array('service_seeker_id'=>$this->Auth->User('id'))));die;
 
-        $this->set('service_history', $this->Paginator->paginate(array('service_provider_id' => $id, 'status' => $status)));
+        $this->set('service_history',
+            $this->Paginator->paginate(array('service_provider_id' => $id, 'status' => $status)));
         $this->set(compact('status'));
     }
 
@@ -165,7 +192,8 @@ class SeekerProviderRequestsController extends AppController
             $seeker_number = preg_replace("/[\s-]+/", "", trim($seeker_phone));
 
             $provider_name = $this->User->field('name', array('id' => $id));
-            $provider_number = preg_replace("/[\s-]+/", "", trim($this->User->field('primary_phone', array('id' => $id))));
+            $provider_number = preg_replace("/[\s-]+/", "",
+                trim($this->User->field('primary_phone', array('id' => $id))));
 
 
             $provider_category = $this->Useful->getUserCategory($id);
@@ -188,8 +216,10 @@ class SeekerProviderRequestsController extends AppController
                     if ($a == '0') {
                         $this->request->data['SeekerProviderRequest']['working_hour'] = $this->request->data['SeekerProviderRequest']['txtTime'];
 
-                    } else if ($a == '1') {
-                        $this->request->data['SeekerProviderRequest']['working_days'] = $this->request->data['SeekerProviderRequest']['txtTime'];
+                    } else {
+                        if ($a == '1') {
+                            $this->request->data['SeekerProviderRequest']['working_days'] = $this->request->data['SeekerProviderRequest']['txtTime'];
+                        }
                     }
                     $this->request->data['SeekerProviderRequest']['requested_amount'] = $this->request->data['SeekerProviderRequest']['txtTotal'];
                     $remaining_amount = $this->Useful->CalculateAmount($this->Auth->user('id'));
@@ -198,9 +228,11 @@ class SeekerProviderRequestsController extends AppController
                         //debug($this->request->data);die;
                         $this->SeekerProviderRequest->create();
                         if ($this->SeekerProviderRequest->save($this->request->data)) {
-                            $this->Session->setFlash('The request has been sent successfully. We will respond to your request at the earliest time possible.', 'default', array('class' => 'success'));
+                            $this->Session->setFlash('The request has been sent successfully. We will respond to your request at the earliest time possible.',
+                                'default', array('class' => 'success'));
 
-                            $this->send_mailto_admin(MAIL_FROM, $seeker_name, $seeker_phone, $provider_category, $provider_name, $time, $service_time);
+                            $this->send_mailto_admin(MAIL_FROM, $seeker_name, $seeker_phone, $provider_category,
+                                $provider_name, $time, $service_time);
                             $this->send_mailto_seeker($seeker_email, $seeker_name);
 
                             $seeker_mob_num = $this->Useful->checkMobileNumber($seeker_number);
@@ -213,18 +245,23 @@ class SeekerProviderRequestsController extends AppController
                             $this->SparrowSMS->sendSMS($provider_mob_num, $text);
 
                             $message = 'success';
+
                             return $this->redirect(array('action' => 'add', $id, $previousId, $message));
                         } else {
-                            $this->Session->setFlash('The request could not be sent.Please, try again.', 'default', array('class' => 'error-message'));
+                            $this->Session->setFlash('The request could not be sent.Please, try again.', 'default',
+                                array('class' => 'error-message'));
+
                             return $this->redirect(array('action' => 'add', $id, $previousId));
                         }
                     } elseif ($this->request->data['SeekerProviderRequest']['flag'] == '1') {
                         //debug($this->request->data);die;
                         $this->SeekerProviderRequest->create();
                         if ($this->SeekerProviderRequest->save($this->request->data)) {
-                            $this->Session->setFlash('The request has been sent successfully. We will respond to your request at the earliest time possible.', 'default', array('class' => 'success'));
+                            $this->Session->setFlash('The request has been sent successfully. We will respond to your request at the earliest time possible.',
+                                'default', array('class' => 'success'));
 
-                            $this->send_mailto_admin(MAIL_FROM, $seeker_name, $seeker_phone, $provider_category, $provider_name, $time, $service_time);
+                            $this->send_mailto_admin(MAIL_FROM, $seeker_name, $seeker_phone, $provider_category,
+                                $provider_name, $time, $service_time);
                             $this->send_mailto_seeker($seeker_email, $seeker_name);
 
                             $seeker_mob_num = $this->Useful->checkMobileNumber($seeker_number);
@@ -237,34 +274,50 @@ class SeekerProviderRequestsController extends AppController
                             $this->SparrowSMS->sendSMS($provider_mob_num, $text);
 
                             $message = 'success';
+
                             return $this->redirect(array('action' => 'add', $id, $previousId, $message));
                         } else {
-                            $this->Session->setFlash('The request could not be sent. Please, try again.', 'default', array('class' => 'error-message'));
+                            $this->Session->setFlash('The request could not be sent. Please, try again.', 'default',
+                                array('class' => 'error-message'));
 
                             return $this->redirect(array('action' => 'add', $id, $previousId));
                         }
                     } else {
 
-                        $this->Session->setFlash('There is not enough amount in your deposit please check Pay in person to request for provider', 'default', array('class' => 'error-message'));
+                        $this->Session->setFlash('There is not enough amount in your deposit please check Pay in person to request for provider',
+                            'default', array('class' => 'error-message'));
+
                         return $this->redirect(array('action' => 'add', $id, $previousId));
                     }
                 } else {
-                    $this->Session->setFlash('The request could not be sent. Please try again.', 'default', array('class' => 'error-message'));
+                    $this->Session->setFlash('The request could not be sent. Please try again.', 'default',
+                        array('class' => 'error-message'));
                 }
             } elseif ($flag == '1') {
                 //debug($this->request->data);die;
                 $this->SeekerProviderRequest->create();
                 if ($this->SeekerProviderRequest->save($this->request->data)) {
                     //debug($this->request->data);die;
-                    $this->Session->setFlash('The request has been sent successfully. We will respond to your request at the earliest time possible.', 'default', array('class' => 'success'));
+                    $this->Session->setFlash('The request has been sent successfully. We will respond to your request at the earliest time possible.',
+                        'default', array('class' => 'success'));
 
-                    $this->send_mailto_admin(MAIL_FROM, $seeker_name, $seeker_phone, $provider_category, $provider_name, $time, $service_time);
+                    $this->send_mailto_admin(MAIL_FROM, $seeker_name, $seeker_phone, $provider_category, $provider_name,
+                        $time, $service_time);
+                    $policy = SITE_URL . 'contents/Privacy_policy';
+                    $emailVars = array(
+                        'company_name' => COMPANY_NAME,
+                        'email' => $seeker_email,
+                        'name' => $seeker_name,
+                        'policy' => $policy,
+                        'company_email' => MAIL_FROM
+                    );
 
-                    $this->send_mailto_seeker($seeker_email, $seeker_name);
-
+                    //$this->send_mailto_seeker($seeker_email, $seeker_name);
+                    $this->Useful->sendEmail($seeker_email, "Thank You", 'mailtoseeker', $emailVars);
 
 
                     $seeker_mob_num = $this->Useful->checkMobileNumber($seeker_number);
+
                     $provider_mob_num = $this->Useful->checkMobileNumber($provider_number);
 
                     $text = "Namaskar, Tapaiko $provider_category sewako order $this->companyName ma confirm bhayo. Haami tapailai samparka garney chau. Dhanyabaad! $this->companyName";
@@ -274,15 +327,18 @@ class SeekerProviderRequestsController extends AppController
                     $this->SparrowSMS->sendSMS($provider_mob_num, $text);
 
                     $message = 'success';
+
                     return $this->redirect(array('action' => 'add', $id, $previousId, $message));
                 } else {
-                    $this->Session->setFlash('The request could not be sent. Please, try again.', 'default', array('class' => 'error-message'));
+                    $this->Session->setFlash('The request could not be sent. Please, try again.', 'default',
+                        array('class' => 'error-message'));
 
                     return $this->redirect(array('action' => 'add', $id, $previousId));
                 }
             } else {
 
-                $this->Session->setFlash('The request could not be sent. Please try again.', 'default', array('class' => 'error-message'));
+                $this->Session->setFlash('The request could not be sent. Please try again.', 'default',
+                    array('class' => 'error-message'));
             }
         }
         $ratePackages = $this->SeekerProviderRequest->RatePackage->find('list');
@@ -292,15 +348,39 @@ class SeekerProviderRequestsController extends AppController
         $this->set(compact('hideSearchBar', 'serviceSeekers', 'serviceProviders', 'ratePackages', 'provider_rates'));
     }
 
-    private function send_mailto_admin($trilord_mail = null, $seeker_name = null, $seeker_phone = null, $provider_category = null, $provider_name = null, $time = null, $service_time = null)
-    {
+    /**
+     * @param null $trilord_mail
+     * @param null $seeker_name
+     * @param null $seeker_phone
+     * @param null $provider_category
+     * @param null $provider_name
+     * @param null $time
+     * @param null $service_time
+     */
+    private function send_mailto_admin(
+        $trilord_mail = null,
+        $seeker_name = null,
+        $seeker_phone = null,
+        $provider_category = null,
+        $provider_name = null,
+        $time = null,
+        $service_time = null
+    ) {
 
         $this->autoRender = false;
         $to = $trilord_mail;
         $from = MAIL_FROM;
         $Email = new CakeEmail();
         $Email->config('default');
-        $Email->viewVars(array('trilord_email' => $trilord_mail, 'seeker_name' => $seeker_name, 'seeker_phone' => $seeker_phone, 'provider_category' => $provider_category, 'provider_name' => $provider_name, 'time' => $time, 'service_time' => $service_time));
+        $Email->viewVars(array(
+            'trilord_email' => $trilord_mail,
+            'seeker_name' => $seeker_name,
+            'seeker_phone' => $seeker_phone,
+            'provider_category' => $provider_category,
+            'provider_name' => $provider_name,
+            'time' => $time,
+            'service_time' => $service_time
+        ));
         $Email->from(array($from => $this->Useful->getCompanyName()))
             ->to($to)
             ->subject('Requested Service')
@@ -311,6 +391,10 @@ class SeekerProviderRequestsController extends AppController
     }
 
 
+    /**
+     * @param null $seeker_email
+     * @param null $seeker_name
+     */
     private function send_mailto_seeker($seeker_email = null, $seeker_name = null)
     {
         $policy = SITE_URL . 'contents/Privacy_policy';
@@ -321,7 +405,13 @@ class SeekerProviderRequestsController extends AppController
         $from = MAIL_FROM;
         $Email = new CakeEmail();
         $Email->config('default');
-        $Email->viewVars(array('company_name' => $this->Useful->getCompanyName(),'trilord_email' => $trilord_mail, 'seeker_name' => $seeker_name, 'policy' => $policy, 'user_agreement' => $user_agreement));
+        $Email->viewVars(array(
+            'company_name' => $this->Useful->getCompanyName(),
+            'trilord_email' => $trilord_mail,
+            'seeker_name' => $seeker_name,
+            'policy' => $policy,
+            'user_agreement' => $user_agreement
+        ));
         $Email->from(array($from => $this->Useful->getCompanyName()))
             ->to($to)
             ->subject('Thank you')
@@ -331,6 +421,9 @@ class SeekerProviderRequestsController extends AppController
     }
 
 
+    /**
+     * @param null $message
+     */
     public function send_request($message = null)
     {
 
@@ -351,15 +444,19 @@ class SeekerProviderRequestsController extends AppController
 
             $this->SeekerProviderRequest->create();
             if ($this->SeekerProviderRequest->save($this->request->data)) {
-                $this->Session->setFlash('The request has been sent successfully. We will respond to your request at the earliest time possible.', 'default', array('class' => 'success'));
+                $this->Session->setFlash('The request has been sent successfully. We will respond to your request at the earliest time possible.',
+                    'default', array('class' => 'success'));
 
                 $this->send_mailto_trilord(MAIL_FROM, $seeker_name, $seeker_phone, $time, $service_time);
                 $this->send_mailto_seeker($seeker_email, $seeker_name);
 
                 $message = 'success';
+
                 return $this->redirect(array('action' => 'send_request', $message));
             } else {
-                $this->Session->setFlash('The request could not be sent. Please, try again.', 'default', array('class' => 'error-message'));
+                $this->Session->setFlash('The request could not be sent. Please, try again.', 'default',
+                    array('class' => 'error-message'));
+
                 return $this->redirect(array('action' => 'send_request'));
             }
 
@@ -367,15 +464,34 @@ class SeekerProviderRequestsController extends AppController
 
     }
 
-    private function send_mailto_trilord($trilord_mail = null, $seeker_name = null, $seeker_phone = null, $time = null, $service_time = null)
-    {
+    /**
+     * @param null $trilord_mail
+     * @param null $seeker_name
+     * @param null $seeker_phone
+     * @param null $time
+     * @param null $service_time
+     */
+    private function send_mailto_trilord(
+        $trilord_mail = null,
+        $seeker_name = null,
+        $seeker_phone = null,
+        $time = null,
+        $service_time = null
+    ) {
 
         $this->autoRender = false;
         $to = $trilord_mail;
         $from = MAIL_FROM;
         $Email = new CakeEmail();
         $Email->config('default');
-        $Email->viewVars(array('company_name' => $this->Useful->getCompanyName(), 'trilord_email' => $trilord_mail, 'seeker_name' => $seeker_name, 'seeker_phone' => $seeker_phone, 'time' => $time, 'service_time' => $service_time));
+        $Email->viewVars(array(
+            'company_name' => $this->Useful->getCompanyName(),
+            'trilord_email' => $trilord_mail,
+            'seeker_name' => $seeker_name,
+            'seeker_phone' => $seeker_phone,
+            'time' => $time,
+            'service_time' => $service_time
+        ));
         $Email->from(array($from => $this->Useful->getCompanyName()))
             ->to($to)
             ->subject('Requested Service')
@@ -400,10 +516,13 @@ class SeekerProviderRequestsController extends AppController
         }
         $this->request->onlyAllow('post', 'delete');
         if ($this->SeekerProviderRequest->delete()) {
-            $this->Session->setFlash('The seeker provider request has been deleted.', 'default', array('class' => 'success'));
+            $this->Session->setFlash('The seeker provider request has been deleted.', 'default',
+                array('class' => 'success'));
         } else {
-            $this->Session->setFlash('The seeker provider request could not be deleted. Please, try again.', 'default', array('class' => 'error-message'));
+            $this->Session->setFlash('The seeker provider request could not be deleted. Please, try again.', 'default',
+                array('class' => 'error-message'));
         }
+
         return $this->redirect(array('action' => 'index'));
     }
 
@@ -449,7 +568,8 @@ class SeekerProviderRequestsController extends AppController
             if ($type == 'export') {
                 $this->layout = false;
                 $this->autoRender = false;
-                $seekerProviderRequests = $this->SeekerProviderRequest->find('all', array('conditions' => array($conditions)));
+                $seekerProviderRequests = $this->SeekerProviderRequest->find('all',
+                    array('conditions' => array($conditions)));
                 $this->set(compact('seekerProviderRequests'));
                 $this->render('/Elements/seeker_provider_request_record');
 
@@ -489,6 +609,9 @@ class SeekerProviderRequestsController extends AppController
     }
 
 
+    /**
+     * @param null $to
+     */
     public function select($to = null)
     {
         //debug($to);die;
@@ -498,7 +621,8 @@ class SeekerProviderRequestsController extends AppController
         $this->layout = false;
         if ($this->request->is('ajax')) {
             $this->SeekerProviderRequest->id = $this->request->data['request_id'];
-            $provider_id = $this->SeekerProviderRequest->field('service_provider_id', array('id' => $this->SeekerProviderRequest->id));
+            $provider_id = $this->SeekerProviderRequest->field('service_provider_id',
+                array('id' => $this->SeekerProviderRequest->id));
             //debug($this->SeekerProviderRequest->id);die;
             if (!$this->SeekerProviderRequest->exists()) {
                 throw new NotFoundException(__('Invalid provider request'));
@@ -567,7 +691,7 @@ class SeekerProviderRequestsController extends AppController
 
                             $to_provider = $provider_mob_num;
 
-                            $text_to_provider = 'Namaskar,Grahak le tapaiko sewa channu bhayeko cha.Tapailai haami aawashyak sewa barey samparka garchau. Dhanyabaad,' . $this->Useful->getCompanyName() .'.';
+                            $text_to_provider = 'Namaskar,Grahak le tapaiko sewa channu bhayeko cha.Tapailai haami aawashyak sewa barey samparka garchau. Dhanyabaad,' . $this->Useful->getCompanyName() . '.';
                             // build the url
                             if (!empty($provider_mob_num)) {
                                 $api_url_provider = "http://api.sparrowsms.com/call_in.php?" .
@@ -583,19 +707,23 @@ class SeekerProviderRequestsController extends AppController
 
                                 $response2 = file_get_contents($api_url_provider);
                             } else {
-                                $this->Session->setFlash('SMS could not be sent to Service Provider.', 'default', array('class' => 'error-message'));
+                                $this->Session->setFlash('SMS could not be sent to Service Provider.', 'default',
+                                    array('class' => 'error-message'));
                             }
                             //check the response and verify
                             //print_r($response);
                         } else {
-                            $this->Session->setFlash('SMS could not be sent.', 'default', array('class' => 'error-message'));
+                            $this->Session->setFlash('SMS could not be sent.', 'default',
+                                array('class' => 'error-message'));
                         }
                         //debug($this->request->data);die;
-                        $this->Session->setFlash('The request has been sent successfully. We will respond to your request at the earliest time possible.', 'default', array('class' => 'success'));
+                        $this->Session->setFlash('The request has been sent successfully. We will respond to your request at the earliest time possible.',
+                            'default', array('class' => 'success'));
 
                         //return $this->redirect(array('controller'=>'seeker_provider_requests','action' => 'response_enquire'));
                     } else {
-                        $this->Session->setFlash('The request could not be sent.Please, try again.', 'default', array('class' => 'error-message'));
+                        $this->Session->setFlash('The request could not be sent.Please, try again.', 'default',
+                            array('class' => 'error-message'));
 
                         //$this->redirect(array('controller'=>'seeker_provider_requests','action' => 'response_enquire'));
                     }
@@ -645,14 +773,17 @@ class SeekerProviderRequestsController extends AppController
                             //check the response and verify
                             //print_r($response);
                         } else {
-                            $this->Session->setFlash('SMS could not be sent.', 'default', array('class' => 'error-message'));
+                            $this->Session->setFlash('SMS could not be sent.', 'default',
+                                array('class' => 'error-message'));
                         }
 
-                        $this->Session->setFlash('The request has been sent successfully. We will respond to your request at the earliest time possible.', 'default', array('class' => 'success'));
+                        $this->Session->setFlash('The request has been sent successfully. We will respond to your request at the earliest time possible.',
+                            'default', array('class' => 'success'));
 
                         //$this->redirect(array('controller'=>'seeker_provider_requests','action' => 'response_enquire'));
                     } else {
-                        $this->Session->setFlash('The request could not be sent.Please, try again.', 'default', array('class' => 'error-message'));
+                        $this->Session->setFlash('The request could not be sent.Please, try again.', 'default',
+                            array('class' => 'error-message'));
 
                         //return $this->redirect(array('controller'=>'seeker_provider_requests','action' => 'response_enquire'));
                     }
@@ -726,10 +857,13 @@ class SeekerProviderRequestsController extends AppController
         if ($this->request->is('post')) {
             $this->SeekerProviderRequest->create();
             if ($this->SeekerProviderRequest->save($this->request->data)) {
-                $this->Session->setFlash('The seeker provider request has been saved.', 'default', array('class' => 'success'));
+                $this->Session->setFlash('The seeker provider request has been saved.', 'default',
+                    array('class' => 'success'));
+
                 return $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash('The seeker provider request could not be saved. Please, try again.', 'default', array('class' => 'error-message'));
+                $this->Session->setFlash('The seeker provider request could not be saved. Please, try again.',
+                    'default', array('class' => 'error-message'));
             }
         }
         $ratePackages = $this->SeekerProviderRequest->RatePackage->find('list');
@@ -737,6 +871,9 @@ class SeekerProviderRequestsController extends AppController
     }
 
 
+    /**
+     * @param null $id
+     */
     public function cancel_request($id = null)
     {
         $this->SeekerProviderRequest->id = $id;
@@ -750,12 +887,19 @@ class SeekerProviderRequestsController extends AppController
             $this->Session->setFlash('The request has been canceled.', 'default', array('class' => 'success'));
             $this->redirect(array('controller' => 'users', 'action' => 'seeker_profile'));
         } else {
-            $this->Session->setFlash('Unable to cancel request. Please, try again.', 'default', array('class' => 'error-message'));
+            $this->Session->setFlash('Unable to cancel request. Please, try again.', 'default',
+                array('class' => 'error-message'));
             $this->redirect(array('controller' => 'users', 'action' => 'seeker_profile'));
         }
     }
 
 
+    /**
+     * @param null $id
+     * @param null $number
+     * @param null $seeker_id
+     * @param null $provider_id
+     */
     public function admin_verify($id = null, $number = null, $seeker_id = null, $provider_id = null)
     {
 
@@ -783,6 +927,7 @@ class SeekerProviderRequestsController extends AppController
                 $this->loadModel('User');
 
                 $this->Session->setFlash('Successfully assigned a request.', 'default', array('class' => 'success'));
+
                 return $this->redirect(array('action' => 'index'));
             } else {
                 $this->Session->setFlash('Please, try again.', 'default', array('class' => 'error-message'));
@@ -797,7 +942,9 @@ class SeekerProviderRequestsController extends AppController
             $this->request->data['SeekerProviderRequest']['freeze_amount'] = "";
 
             if ($this->SeekerProviderRequest->save($this->request->data)) {
-                $this->Session->setFlash('Successfully completed a requested service', 'default', array('class' => 'success'));
+                $this->Session->setFlash('Successfully completed a requested service', 'default',
+                    array('class' => 'success'));
+
                 return $this->redirect(array('action' => 'index'));
             } else {
                 $this->Session->setFlash('Please, try again.', 'default', array('class' => 'error-message'));
@@ -812,6 +959,7 @@ class SeekerProviderRequestsController extends AppController
 
             if ($this->SeekerProviderRequest->save($this->request->data)) {
                 $this->Session->setFlash('Request has been withdrawed.', 'default', array('class' => 'success'));
+
                 return $this->redirect(array('action' => 'index'));
             } else {
                 $this->Session->setFlash('Please, try again.', 'default', array('class' => 'error-message'));
@@ -822,6 +970,10 @@ class SeekerProviderRequestsController extends AppController
 
     }
 
+    /**
+     * @param null $id
+     * @param null $number
+     */
     public function admin_request_lock($id = null, $number = null)
     {
         $this->SeekerProviderRequest->id = $id;
@@ -834,6 +986,7 @@ class SeekerProviderRequestsController extends AppController
 
             if ($this->SeekerProviderRequest->save($this->request->data)) {
                 $this->Session->setFlash('Request has been locked.', 'default', array('class' => 'success'));
+
                 return $this->redirect(array('action' => 'index'));
             } else {
                 $this->Session->setFlash('Unable to lock the request.', 'default', array('class' => 'error-message'));
@@ -843,6 +996,7 @@ class SeekerProviderRequestsController extends AppController
 
             if ($this->SeekerProviderRequest->save($this->request->data)) {
                 $this->Session->setFlash('Request has been unlocked.', 'default', array('class' => 'success'));
+
                 return $this->redirect(array('action' => 'index'));
             } else {
                 $this->Session->setFlash('Unable to unlock the request.', 'default', array('class' => 'error-message'));
@@ -856,13 +1010,19 @@ class SeekerProviderRequestsController extends AppController
     }
 
 
+    /**
+     *
+     */
     public function response_enquire()
     {
         $id = $this->Auth->User('id');
         $this->Paginator->settings = array('order' => array('SeekerProviderRequest.created_date' => 'desc'));
         //debug($this->Paginator->paginate());die;
         $this->SeekerProviderRequest->recursive = 0;
-        $this->set('ProviderRequest', $this->Paginator->paginate(array('SeekerProviderRequest.service_seeker_id' => $id, 'SeekerProviderRequest.reply_flag' => '1')));
+        $this->set('ProviderRequest', $this->Paginator->paginate(array(
+            'SeekerProviderRequest.service_seeker_id' => $id,
+            'SeekerProviderRequest.reply_flag' => '1'
+        )));
         $hideSearchBar = true;
         $active_response_enquire = "active";
         $page_title = "Response Enquiry";
@@ -889,9 +1049,11 @@ class SeekerProviderRequestsController extends AppController
             //debug($this->request->data);die;
             if ($this->SeekerProviderRequest->save($this->request->data)) {
                 $this->Session->setFlash('The request has been saved.', 'default', array('class' => 'success'));
+
                 return $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash('The request could not be saved. Please, try again.', 'default', array('class' => 'error-message'));
+                $this->Session->setFlash('The request could not be saved. Please, try again.', 'default',
+                    array('class' => 'error-message'));
             }
         } else {
             $options = array('conditions' => array('SeekerProviderRequest.' . $this->SeekerProviderRequest->primaryKey => $id));
@@ -909,6 +1071,9 @@ class SeekerProviderRequestsController extends AppController
     }
 
 
+    /**
+     * @param null $id
+     */
     public function admin_edit($id = null)
     {
         if (!$this->SeekerProviderRequest->exists($id)) {
@@ -919,9 +1084,11 @@ class SeekerProviderRequestsController extends AppController
             //debug($this->request->data);die;
             if ($this->SeekerProviderRequest->save($this->request->data)) {
                 $this->Session->setFlash('The request has been saved.', 'default', array('class' => 'success'));
+
                 return $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash('The request could not be saved. Please, try again.', 'default', array('class' => 'error-message'));
+                $this->Session->setFlash('The request could not be saved. Please, try again.', 'default',
+                    array('class' => 'error-message'));
             }
         } else {
             $options = array('conditions' => array('SeekerProviderRequest.' . $this->SeekerProviderRequest->primaryKey => $id));
@@ -949,10 +1116,13 @@ class SeekerProviderRequestsController extends AppController
         }
         $this->request->onlyAllow('post', 'delete');
         if ($this->SeekerProviderRequest->delete()) {
-            $this->Session->setFlash('The seeker provider request has been deleted.', 'default', array('class' => 'success'));
+            $this->Session->setFlash('The seeker provider request has been deleted.', 'default',
+                array('class' => 'success'));
         } else {
-            $this->Session->setFlash('The seeker provider request could not be deleted. Please, try again.', 'default', array('class' => 'error-message'));
+            $this->Session->setFlash('The seeker provider request could not be deleted. Please, try again.', 'default',
+                array('class' => 'error-message'));
         }
+
         return $this->redirect(array('action' => 'index'));
     }
 }

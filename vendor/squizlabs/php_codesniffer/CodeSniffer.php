@@ -73,7 +73,7 @@ class PHP_CodeSniffer
      *
      * @var string
      */
-    const VERSION = '2.2.0';
+    const VERSION = '2.3.0';
 
     /**
      * Package stability; either stable, beta or alpha.
@@ -979,7 +979,13 @@ class PHP_CodeSniffer
             }
         }
 
-        if (is_file($ref) === false) {
+        if (is_file($ref) === true) {
+            if (substr($ref, -9) === 'Sniff.php') {
+                // A single external sniff.
+                self::$rulesetDirs[] = dirname(dirname(dirname($ref)));
+                return array($ref);
+            }
+        } else {
             // See if this is a whole standard being referenced.
             $path = $this->getInstalledStandardPath($ref);
             if (self::isPharFile($path) === true && strpos($path, 'ruleset.xml') === false) {
@@ -1317,6 +1323,12 @@ class PHP_CodeSniffer
             $classNameNS = str_replace('_', '\\', $className);
             if (class_exists($classNameNS, false) === true) {
                 $className = $classNameNS;
+            }
+
+            // Skip abstract classes.
+            $reflection = new ReflectionClass($className);
+            if ($reflection->isAbstract() === true) {
+                continue;
             }
 
             $listeners[$className] = $className;
@@ -2349,6 +2361,7 @@ class PHP_CodeSniffer
         }
 
         if (is_file($configFile) === false) {
+            $GLOBALS['PHP_CODESNIFFER_CONFIG_DATA'] = array();
             return array();
         }
 

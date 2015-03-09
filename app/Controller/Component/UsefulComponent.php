@@ -338,9 +338,6 @@ class UsefulComponent extends Component
         }
         return $seeker_mob_num;
     }
-    public function getCompanyName(){
-        return "trilordMarket";
-    }
     public function sendEmail($emailTo, $subject, $template, $vars = array(), $config = "default", $format = "html"){
         $this->autoRender = false;
 

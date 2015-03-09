@@ -36,10 +36,6 @@ class AppController extends Controller
     public $components = array(
         'Session',
         'Auth' => array(
-            /* 'loginRedirect' => array(
-                 'controller' => 'users',
-                 'action' => 'index'
-             ),*/
             'loginRedirect' => array(
                 'controller' => 'pages',
                 'action' => 'display',
@@ -88,7 +84,6 @@ class AppController extends Controller
         'seeker_provider_requests|response_enquire',
         'ServiceRequestRelays|seeker_request',
         'service_package_requests|add',
-        //'pages|search_marketplace',
         'payments|paypal',
         'payments|bank_deposit',
         'payments|esewa_deposit',

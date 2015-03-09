@@ -164,6 +164,20 @@ class PHP_CodeSniffer_Tokenizers_PHP
                                                 'shared' => false,
                                                 'with'   => array(),
                                                ),
+                            T_USE           => array(
+                                                'start'  => array(T_OPEN_CURLY_BRACKET => T_OPEN_CURLY_BRACKET),
+                                                'end'    => array(T_CLOSE_CURLY_BRACKET => T_CLOSE_CURLY_BRACKET),
+                                                'strict' => false,
+                                                'shared' => false,
+                                                'with'   => array(),
+                                               ),
+                            T_DECLARE       => array(
+                                                'start'  => array(T_OPEN_CURLY_BRACKET => T_OPEN_CURLY_BRACKET),
+                                                'end'    => array(T_CLOSE_CURLY_BRACKET => T_CLOSE_CURLY_BRACKET),
+                                                'strict' => false,
+                                                'shared' => false,
+                                                'with'   => array(),
+                                               ),
                             T_NAMESPACE     => array(
                                                 'start'  => array(T_OPEN_CURLY_BRACKET => T_OPEN_CURLY_BRACKET),
                                                 'end'    => array(T_CLOSE_CURLY_BRACKET => T_CLOSE_CURLY_BRACKET),
@@ -192,8 +206,14 @@ class PHP_CodeSniffer_Tokenizers_PHP
                                                 'with'   => array(),
                                                ),
                             T_SWITCH        => array(
-                                                'start'  => array(T_OPEN_CURLY_BRACKET => T_OPEN_CURLY_BRACKET),
-                                                'end'    => array(T_CLOSE_CURLY_BRACKET => T_CLOSE_CURLY_BRACKET),
+                                                'start'  => array(
+                                                             T_OPEN_CURLY_BRACKET => T_OPEN_CURLY_BRACKET,
+                                                             T_COLON              => T_COLON,
+                                                            ),
+                                                'end'    => array(
+                                                             T_CLOSE_CURLY_BRACKET => T_CLOSE_CURLY_BRACKET,
+                                                             T_ENDSWITCH           => T_ENDSWITCH,
+                                                            ),
                                                 'strict' => true,
                                                 'shared' => false,
                                                 'with'   => array(),
@@ -257,6 +277,11 @@ class PHP_CodeSniffer_Tokenizers_PHP
      */
     public $endScopeTokens = array(
                               T_CLOSE_CURLY_BRACKET => T_CLOSE_CURLY_BRACKET,
+                              T_ENDIF               => T_ENDIF,
+                              T_ENDFOR              => T_ENDFOR,
+                              T_ENDFOREACH          => T_ENDFOREACH,
+                              T_ENDWHILE            => T_ENDWHILE,
+                              T_ENDSWITCH           => T_ENDSWITCH,
                               T_BREAK               => T_BREAK,
                               T_END_HEREDOC         => T_END_HEREDOC,
                              );
@@ -607,6 +632,44 @@ class PHP_CodeSniffer_Tokenizers_PHP
                     $stackPtr++;
                     continue;
                 }
+            }//end if
+
+            /*
+                HHVM 3.5 tokenizes "else[\s]+if" as a T_ELSEIF token while PHP
+                proper only tokenizes "elseif" as a T_ELSEIF token. So split
+                up the HHVM token to make it looks like proper PHP.
+            */
+
+            if ($tokenIsArray === true
+                && $token[0] === T_ELSEIF
+                && strtolower($token[1]) !== 'elseif'
+            ) {
+                $finalTokens[$newStackPtr] = array(
+                                              'content' => substr($token[1], 0, 4),
+                                              'code'    => T_ELSE,
+                                              'type'    => 'T_ELSE',
+                                             );
+
+                $newStackPtr++;
+                $finalTokens[$newStackPtr] = array(
+                                              'content' => substr($token[1], 4, -2),
+                                              'code'    => T_WHITESPACE,
+                                              'type'    => 'T_WHITESPACE',
+                                             );
+
+                $newStackPtr++;
+                $finalTokens[$newStackPtr] = array(
+                                              'content' => substr($token[1], -2),
+                                              'code'    => T_IF,
+                                              'type'    => 'T_IF',
+                                             );
+
+                if (PHP_CODESNIFFER_VERBOSITY > 1) {
+                    echo "\t\t* token $stackPtr changed from T_ELSEIF to T_ELSE/T_WHITESPACE/T_IF".PHP_EOL;
+                }
+
+                $newStackPtr++;
+                continue;
             }//end if
 
             /*

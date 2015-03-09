@@ -97,13 +97,11 @@ class PHP_CodeSniffer_Reports_Full implements PHP_CodeSniffer_Report
 
         $file       = $report['filename'];
         $fileLength = strlen($file);
-        if (($fileLength + 6) > ($maxErrorLength + $paddingLength)) {
-            $width = min($width, ($fileLength + 6));
-        } else {
-            $width = min($width, ($maxErrorLength + $paddingLength));
+        $maxWidth   = max(($fileLength + 6), ($maxErrorLength + $paddingLength));
+        $width      = min($width, $maxWidth);
+        if ($width < 70) {
+            $width = 70;
         }
-
-        $width = max($width, 70);
 
         echo PHP_EOL."\033[1mFILE: ";
         if ($fileLength <= ($width - 6)) {
@@ -137,6 +135,10 @@ class PHP_CodeSniffer_Reports_Full implements PHP_CodeSniffer_Report
 
         // The maximum amount of space an error message can use.
         $maxErrorSpace = ($width - $paddingLength - 1);
+        if ($showSources === true) {
+            // Account for the chars used to print colors.
+            $maxErrorSpace += 8;
+        }
 
         foreach ($report['messages'] as $line => $lineErrors) {
             foreach ($lineErrors as $column => $colErrors) {

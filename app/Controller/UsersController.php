@@ -1,6 +1,7 @@
 <?php
 App::uses('AppController', 'Controller');
-App::uses('CakeEmail', 'Network/Email', 'SparrowSMS');
+App::uses('CakeEmail', 'Network/Email');
+App::uses('UserRepository', 'Repository/Impl');
 
 /**
  * Users Controller
@@ -18,34 +19,34 @@ class UsersController extends AppController
      */
 
 
-    public $components = array('Paginator', 'Useful', 'SparrowSMS', 'PhpThumb.PhpThumb', 'PhpThumb.PhpCustom', 'RequestHandler');
+    public $components = array(
+        'Paginator',
+        'Useful',
+        'SparrowSMS',
+        'PhpThumb.PhpThumb',
+        'PhpThumb.PhpCustom',
+        'RequestHandler'
+    );
     public $helpers = array('QrCode');
 
-    /*
-    public function isAuthorized($user) {
-    // All registered users can add posts
-    if ($this->action === 'add') {
-        return true;
-    }
 
-    // The owner of a post can edit and delete it
-    if (in_array($this->action, array('edit', 'delete'))) {
-        $postId = (int) $this->request->params['pass'][0];
-        if ($this->User->isOwnedBy($postId, $user['id'])) {
-            return true;
-        }
-    }
+    var $UserRepository;
 
-    return parent::isAuthorized($user);
-}
-*/
+    public function __construct($request = null, $response = null)
+    {
+        parent::__construct($request, $response);
+
+        $this->UserRepository = new UserRepository($this->User);
+
+    }
 
 
     public function beforeFilter()
     {
         parent::beforeFilter();
         // Allow users to register and logout.
-        $this->Auth->allow('add', 'register', 'provider_add', 'logout', 'confirm_message', 'forgot_password', 'reset_password');
+        $this->Auth->allow('add', 'register', 'provider_add', 'logout', 'confirm_message', 'forgot_password',
+            'reset_password');
     }
 
     public function login()
@@ -53,15 +54,18 @@ class UsersController extends AppController
         if ($this->Auth->user('id')) {
             $this->redirect(array('controller' => 'pages', 'action' => 'display'));
         }
+
         if ($this->request->is('post')) {
             if ($this->Auth->login()) {
-                //debug($this->request->data);die;
                 return $this->redirect($this->Auth->redirect());
             }
-            $this->Session->setFlash('Invalid username or password, try again', 'default', array('class' => 'error-message'));
+            $this->Session->setFlash('Invalid username or password, try again', 'default',
+                array('class' => 'error-message'));
         }
+
         $hideSearchBar = true;
         $this->set(compact('hideSearchBar'));
+
     }
 
     public function logout()
@@ -72,10 +76,6 @@ class UsersController extends AppController
     public function forgot_password()
     {
 
-
-        //  if ($this->request->is('ajax')) {
-        // $this->autoRender = false;
-        // $this->layout = false;
         $email = $this->request->data['UserForgot']['email'];
         $user_detail = $this->User->find('first', array('conditions' => array('User.email' => $email)));
 
@@ -113,14 +113,18 @@ class UsersController extends AppController
             $email = base64_decode($this->params->query['email']);
 
             $token = $this->params->query['token'];
-            $get_user_count = $this->User->find('first', array('conditions' => array('User.token' => $token,
-                'User.email' => $email,
-                'User.status' => 1
-            )));
+            $get_user_count = $this->User->find('first', array(
+                'conditions' => array(
+                    'User.token' => $token,
+                    'User.email' => $email,
+                    'User.status' => 1
+                )
+            ));
 
 
             if ($get_user_count < 1) {
-                $this->Session->setFlash('Invalid token url. Please try again.', 'default', array('class' => 'error-message'));
+                $this->Session->setFlash('Invalid token url. Please try again.', 'default',
+                    array('class' => 'error-message'));
                 $validity = 0;
             } else {
                 $validity = 1;
@@ -131,7 +135,8 @@ class UsersController extends AppController
                 //reset password in db and redirect accordingly
                 $validity = 1;
                 if ($this->request->data['User']['password1'] != $this->request->data['User']['confirm_password']) {
-                    $this->Session->setFlash('Passwords do not match, try again.', 'default', array('class' => 'error-message'));
+                    $this->Session->setFlash('Passwords do not match, try again.', 'default',
+                        array('class' => 'error-message'));
                 }
                 $this->request->data['User']['password_change_date'] = date('Y-m-d H:i:s');
                 $this->request->data['User']['password'] = $this->request->data['User']['password1'];
@@ -142,10 +147,12 @@ class UsersController extends AppController
                 $this->request->data['User']['id'] = $get_user_count['User']['id'];
                 //debug($new_token);exit;
                 if ($this->User->save($this->request->data)) {
-                    $this->Session->setFlash('Password updated successfully, login with new password to continue.', 'default', array('class' => 'success'));
+                    $this->Session->setFlash('Password updated successfully, login with new password to continue.',
+                        'default', array('class' => 'success'));
                     $this->redirect(array('action' => 'login'));
                 } else {
-                    $this->Session->setFlash('The Password could not be updated, try again.', 'default', array('class' => 'error-message'));
+                    $this->Session->setFlash('The Password could not be updated, try again.', 'default',
+                        array('class' => 'error-message'));
                 }
 
 
@@ -203,7 +210,8 @@ class UsersController extends AppController
             if ($this->Auth->login()) {
                 return $this->redirect($this->Auth->redirect());
             }
-            $this->Session->setFlash('Invalid username or password, try again', 'default', array('class' => 'error-message'));
+            $this->Session->setFlash('Invalid username or password, try again', 'default',
+                array('class' => 'error-message'));
         }
     }
 
@@ -411,7 +419,12 @@ class UsersController extends AppController
             $getPlaces = $this->User->query("select Place.id,concat_ws(' - ',Place.name,District.name) PlaceName from places as Place
 	inner join districts as District on District.id=Place.district_id where Place.id='" . $place . "'");
 
-            $placeDistrict = array(array('id' => $getPlaces[0]['Place']['id'], 'name' => $getPlaces[0][0]['PlaceName']));
+            $placeDistrict = array(
+                array(
+                    'id' => $getPlaces[0]['Place']['id'],
+                    'name' => $getPlaces[0][0]['PlaceName']
+                )
+            );
 
             //debug($placeDistrict);
         } else {
@@ -419,7 +432,12 @@ class UsersController extends AppController
         }
         if ($category > 0) {
             $Category = $this->User->query("Select id,title from service_categories where id = '{$category}'");
-            $Category = array(array('id' => $Category[0]['service_categories']['id'], 'name' => $Category[0]['service_categories']['title']));
+            $Category = array(
+                array(
+                    'id' => $Category[0]['service_categories']['id'],
+                    'name' => $Category[0]['service_categories']['title']
+                )
+            );
             //debug($Category);die;
         } else {
             $Category = "";
@@ -430,7 +448,8 @@ class UsersController extends AppController
         $this->User->recursive = 0;
         //$users = $this->Paginator->paginate();
         $users = $this->Paginator->paginate();
-        $this->set(compact('users', 'from', 'to', 'level', 'provider_type', 'provider_name', 'place', 'category', 'getPlace', 'getCategory', 'placeDistrict', 'Category'));
+        $this->set(compact('users', 'from', 'to', 'level', 'provider_type', 'provider_name', 'place', 'category',
+            'getPlace', 'getCategory', 'placeDistrict', 'Category'));
     }
 
 
@@ -540,7 +559,12 @@ left join districts D on D.id=P.district_id
             $getPlaces = $this->User->query("select Place.id,concat_ws(' - ',Place.name,District.name) PlaceName from places as Place
 	inner join districts as District on District.id=Place.district_id where Place.id='" . $place . "'");
 
-            $placeDistrict = array(array('id' => $getPlaces[0]['Place']['id'], 'name' => $getPlaces[0][0]['PlaceName']));
+            $placeDistrict = array(
+                array(
+                    'id' => $getPlaces[0]['Place']['id'],
+                    'name' => $getPlaces[0][0]['PlaceName']
+                )
+            );
 
             //debug($placeDistrict);
         } else {
@@ -548,7 +572,12 @@ left join districts D on D.id=P.district_id
         }
         if ($category > 0) {
             $Category = $this->User->query("Select id,title from service_categories where id = '{$category}'");
-            $Category = array(array('id' => $Category[0]['service_categories']['id'], 'name' => $Category[0]['service_categories']['title']));
+            $Category = array(
+                array(
+                    'id' => $Category[0]['service_categories']['id'],
+                    'name' => $Category[0]['service_categories']['title']
+                )
+            );
             //debug($Category);die;
         } else {
             $Category = "";
@@ -559,7 +588,8 @@ left join districts D on D.id=P.district_id
 
         $this->User->recursive = 0;
         $users = $this->Paginator->paginate();
-        $this->set(compact('users', 'from', 'to', 'level', 'provider_type', 'provider_name', 'place', 'category', 'getPlace', 'getCategory', 'placeDistrict', 'Category'));
+        $this->set(compact('users', 'from', 'to', 'level', 'provider_type', 'provider_name', 'place', 'category',
+            'getPlace', 'getCategory', 'placeDistrict', 'Category'));
     }
 
 
@@ -671,11 +701,14 @@ left join districts D on D.id=P.district_id
 (user_id,title,document_file)  values ('$user_Id','$documentId','$document_insert')";exit;*/
                 }
                 $this->Session->setFlash('The user has been saved.', 'default', array('class' => 'success'));
+
                 /*$link='http://192.168.1.122/serviceportal/users/confirm_message?email='.$email.'&code='.$usercode;
                         debug($link);die;*/
+
                 return $this->redirect(array('action' => 'provider_profile', $user_Id));
             } else {
-                $this->Session->setFlash('The user could not be saved. Please, try again.', 'default', array('class' => 'error-message'));
+                $this->Session->setFlash('The user could not be saved. Please, try again.', 'default',
+                    array('class' => 'error-message'));
             }
         }
 
@@ -712,9 +745,11 @@ left join districts D on D.id=P.district_id
         if ($this->request->is(array('post', 'put'))) {
             if ($this->User->save($this->request->data)) {
                 $this->Session->setFlash('The user has been updated.', 'default', array('class' => 'success'));
+
                 return $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash('The user could not be saved. Please, try again.', 'default', array('class' => 'error-message'));
+                $this->Session->setFlash('The user could not be saved. Please, try again.', 'default',
+                    array('class' => 'error-message'));
             }
         } else {
             $options = array('conditions' => array('User.' . $this->User->primaryKey => $id));
@@ -733,7 +768,18 @@ left join districts D on D.id=P.district_id
         $user_name = explode(" ", $user_name);
         $user_name = $user_name[0];
 
-        $existing_record = $this->User->find('first', array('recursive' => '-1', 'fields' => array('name', 'email', 'primary_phone', 'dob_english', 'permanent_address', 'temporary_address'), 'conditions' => array('User.id' => $id)));
+        $existing_record = $this->User->find('first', array(
+            'recursive' => '-1',
+            'fields' => array(
+                'name',
+                'email',
+                'primary_phone',
+                'dob_english',
+                'permanent_address',
+                'temporary_address'
+            ),
+            'conditions' => array('User.id' => $id)
+        ));
 
         if (!$this->User->exists($id)) {
             throw new NotFoundException(__('Invalid user'));
@@ -741,7 +787,18 @@ left join districts D on D.id=P.district_id
         if ($this->request->is(array('post', 'put'))) {
             if ($this->User->save($this->request->data)) {
                 $this->Session->setFlash('Profile has been updated.', 'default', array('class' => 'success'));
-                $new_record = $this->User->find('first', array('recursive' => '-1', 'fields' => array('name', 'email', 'primary_phone', 'dob_english', 'permanent_address', 'temporary_address'), 'conditions' => array('id' => $id)));
+                $new_record = $this->User->find('first', array(
+                    'recursive' => '-1',
+                    'fields' => array(
+                        'name',
+                        'email',
+                        'primary_phone',
+                        'dob_english',
+                        'permanent_address',
+                        'temporary_address'
+                    ),
+                    'conditions' => array('id' => $id)
+                ));
                 //$new_record=$this->User->query("select name,email,primary_phone,dob_english,permanent_address,temporary_address from users where id='$id'");
 
                 $data_array = array(
@@ -760,13 +817,21 @@ left join districts D on D.id=P.district_id
                 // $this->send_mailto_seeker($user_email, $user_name, $changed_fields);
 
                 $policy = SITE_URL . 'contents/Privacy_policy';
-                $emailVars = array('company_name' => COMPANY_NAME, 'user_name' => $user_name, 'user_info' => $changed_fields, 'trilord_email' => MAIL_FROM, 'policy' => $policy, 'user_agreement' => '');
+                $emailVars = array(
+                    'company_name' => COMPANY_NAME,
+                    'user_name' => $user_name,
+                    'user_info' => $changed_fields,
+                    'trilord_email' => MAIL_FROM,
+                    'policy' => $policy,
+                    'user_agreement' => ''
+                );
 
                 $this->Useful->sendEmail($user_email, "Profile Updated", 'profile_update', $emailVars);
 
                 return $this->redirect(array('action' => 'seeker_profile'));
             } else {
-                $this->Session->setFlash('The user could not be updated. Please, try again.', 'default', array('class' => 'error-message'));
+                $this->Session->setFlash('The user could not be updated. Please, try again.', 'default',
+                    array('class' => 'error-message'));
             }
         } else {
             $options = array('conditions' => array('User.' . $this->User->primaryKey => $id));
@@ -797,15 +862,18 @@ left join districts D on D.id=P.district_id
             $this->request->data['User']['profile_photo'] = $name;*/
             if ($this->User->save($this->request->data)) {
                 $this->Session->setFlash('The user has been saved.', 'default', array('class' => 'success'));
+
                 /*if (move_uploaded_file($tmp_name,WWW_ROOT.'seekers_photo'.'\\'.$name)) {
                     $this->Session->setFlash('Photo uploaded.');
                   }
                       else{
                           $this->Session->setFlash('Unable to upload photo.');
                       }*/
+
                 return $this->redirect(array('action' => 'seeker_index'));
             } else {
-                $this->Session->setFlash('The user could not be saved. Please, try again.', 'default', array('class' => 'error-message'));
+                $this->Session->setFlash('The user could not be saved. Please, try again.', 'default',
+                    array('class' => 'error-message'));
             }
         } else {
             $options = array('conditions' => array('User.' . $this->User->primaryKey => $id));
@@ -841,7 +909,8 @@ left join districts D on D.id=P.district_id
 
                 return $this->redirect(array('action' => 'provider_pic_edit', $this->User->id));
             } else {
-                $this->Session->setFlash('The user could not be saved. Please, try again.', 'default', array('class' => 'error-message'));
+                $this->Session->setFlash('The user could not be saved. Please, try again.', 'default',
+                    array('class' => 'error-message'));
             }
         } else {
             $options = array('conditions' => array('User.' . $this->User->primaryKey => $id));
@@ -883,18 +952,28 @@ left join districts D on D.id=P.district_id
                         $this->Session->setFlash('Photo uploaded.', 'default', array('class' => 'success'));
 
                         $policy = SITE_URL . 'contents/Privacy_policy';
-                        $emailVars = array('company_name' => COMPANY_NAME, 'user_name' => $user_name, 'user_info' => 'Profile Photo', 'trilord_email' => MAIL_FROM, 'policy' => $policy, 'user_agreement' => '');
+                        $emailVars = array(
+                            'company_name' => COMPANY_NAME,
+                            'user_name' => $user_name,
+                            'user_info' => 'Profile Photo',
+                            'trilord_email' => MAIL_FROM,
+                            'policy' => $policy,
+                            'user_agreement' => ''
+                        );
                         $this->Useful->sendEmail($user_email, "Profile Updated", 'profile_update', $emailVars);
 
 
                         //$this->send_mailto_seeker($user_email, $user_name, 'Profile Photo');
 
                     } else {
-                        $this->Session->setFlash('Unable to upload photo.', 'default', array('class' => 'error-message'));
+                        $this->Session->setFlash('Unable to upload photo.', 'default',
+                            array('class' => 'error-message'));
                     }
+
                     return $this->redirect(array('action' => 'seeker_profile', $this->User->id));
                 } else {
-                    $this->Session->setFlash('The user could not be saved. Please, try again.', 'default', array('class' => 'error-message'));
+                    $this->Session->setFlash('The user could not be saved. Please, try again.', 'default',
+                        array('class' => 'error-message'));
                 }
             } else {
                 return $this->redirect(array('action' => 'seeker_profile', $this->User->id));
@@ -927,23 +1006,34 @@ left join districts D on D.id=P.district_id
 
 
                                 $policy = SITE_URL . 'contents/Privacy_policy';
-                                $emailVars = array('company_name' => COMPANY_NAME, 'user_name' => $user_name, 'user_info' => 'Password', 'trilord_email' => MAIL_FROM, 'policy' => $policy, 'user_agreement' => '');
+                                $emailVars = array(
+                                    'company_name' => COMPANY_NAME,
+                                    'user_name' => $user_name,
+                                    'user_info' => 'Password',
+                                    'trilord_email' => MAIL_FROM,
+                                    'policy' => $policy,
+                                    'user_agreement' => ''
+                                );
                                 $this->Useful->sendEmail($user_email, "Profile Updated", 'profile_update', $emailVars);
 
                                 // $this->send_mailto_seeker($user_email, $user_name, 'Password');
                                 return $this->redirect(array('action' => 'seeker_profile', $this->User->id));
                             } else {
-                                $this->Session->setFlash('Password didnot match', 'default', array('class' => 'error-message'));
+                                $this->Session->setFlash('Password didnot match', 'default',
+                                    array('class' => 'error-message'));
                             }
                         } else {
-                            $this->Session->setFlash('Password must be of atlest 6 characters', 'default', array('class' => 'error-message'));
+                            $this->Session->setFlash('Password must be of atlest 6 characters', 'default',
+                                array('class' => 'error-message'));
                         }
                     } else {
 
-                        $this->Session->setFlash('Enter your new password', 'default', array('class' => 'error-message'));
+                        $this->Session->setFlash('Enter your new password', 'default',
+                            array('class' => 'error-message'));
                     }
                 } else {
-                    $this->Session->setFlash('The user with this password did not found', 'default', array('class' => 'error-message'));
+                    $this->Session->setFlash('The user with this password did not found', 'default',
+                        array('class' => 'error-message'));
                 }
             } else {
                 $this->Session->setFlash('Enter your password', 'default', array('class' => 'error-message'));
@@ -967,14 +1057,17 @@ left join districts D on D.id=P.district_id
                             $this->User->saveField('password', $pass);
                             $this->Session->setFlash('Password changed', 'default', array('class' => 'success'));
                         } else {
-                            $this->Session->setFlash('password didnot match', 'default', array('class' => 'error-message'));
+                            $this->Session->setFlash('password didnot match', 'default',
+                                array('class' => 'error-message'));
                         }
                     } else {
 
-                        $this->Session->setFlash('Enter your new password', 'default', array('class' => 'error-message'));
+                        $this->Session->setFlash('Enter your new password', 'default',
+                            array('class' => 'error-message'));
                     }
                 } else {
-                    $this->Session->setFlash('The user with this password didnot found', 'default', array('class' => 'error-message'));
+                    $this->Session->setFlash('The user with this password didnot found', 'default',
+                        array('class' => 'error-message'));
                 }
             } else {
                 $this->Session->setFlash('Enter your password', 'default', array('class' => 'error-message'));
@@ -1069,10 +1162,12 @@ left join districts D on D.id=P.district_id
 
                 }
                 $this->Session->setFlash('The user has been saved.', 'default', array('class' => 'success'));
+
                 return $this->redirect(array('action' => 'provider_profile', $user_Id));
             } else {
 
-                $this->Session->setFlash('The user could not be saved. Please, try again.', 'default', array('class' => 'error-message'));
+                $this->Session->setFlash('The user could not be saved. Please, try again.', 'default',
+                    array('class' => 'error-message'));
             }
             $this->data = $this->User->read(null, $id);
         } else {
@@ -1107,7 +1202,8 @@ left join districts D on D.id=P.district_id
 
         $this->loadModel('Country');
         $country = $this->Country->find('list');
-        $this->set(compact('categories', 'user_details', 'serviceCategories', 'ratePackages', 'checkedArray', 'documentPackages', 'documents', 'document', 'country'));
+        $this->set(compact('categories', 'user_details', 'serviceCategories', 'ratePackages', 'checkedArray',
+            'documentPackages', 'documents', 'document', 'country'));
         //$this->render('provider_edit');
     }
 
@@ -1128,8 +1224,10 @@ left join districts D on D.id=P.district_id
         if ($this->User->delete()) {
             $this->Session->setFlash('The user has been deleted.', 'default', array('class' => 'success'));
         } else {
-            $this->Session->setFlash('The user could not be deleted. Please, try again.', 'default', array('class' => 'error-message'));
+            $this->Session->setFlash('The user could not be deleted. Please, try again.', 'default',
+                array('class' => 'error-message'));
         }
+
         return $this->redirect(array('action' => 'index'));
     }
 
@@ -1141,7 +1239,10 @@ left join districts D on D.id=P.district_id
     public function admin_index()
     {
         $this->User->recursive = 0;
-        $this->Paginator->settings = array('conditions' => array('User.role!="serviceprovider" and User.role!="serviceseeker"'), 'order' => array('created_date' => ' desc'));
+        $this->Paginator->settings = array(
+            'conditions' => array('User.role!="serviceprovider" and User.role!="serviceseeker"'),
+            'order' => array('created_date' => ' desc')
+        );
         $this->set('users', $this->Paginator->paginate());
     }
 
@@ -1164,7 +1265,8 @@ left join districts D on D.id=P.district_id
 
     public function complain_msg()
     {
-        $provider = $this->User->find('list', array('conditions' => array('User.role' => 'Serviceprovider'), 'fields' => 'User.name'));
+        $provider = $this->User->find('list',
+            array('conditions' => array('User.role' => 'Serviceprovider'), 'fields' => 'User.name'));
         $this->set('provider', $provider);
         $date = date('Y-m-d');
         $this->request->data['User']['complain_date'] = $date;
@@ -1174,9 +1276,11 @@ left join districts D on D.id=P.district_id
             //debug($this->request->data);die;
             if ($this->User->save($this->request->data)) {
                 $this->Session->setFlash('The complain has been saved.', 'default', array('class' => 'success'));
+
                 return $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash('The complain could not be saved.', 'default', array('class' => 'error-message'));
+                $this->Session->setFlash('The complain could not be saved.', 'default',
+                    array('class' => 'error-message'));
             }
         }
     }
@@ -1193,50 +1297,16 @@ left join districts D on D.id=P.district_id
             $this->redirect(array('controller' => 'pages', 'action' => 'display'));
         }
         if ($this->request->is('post')) {
+            $success = $this->UserRepository->create($this->request->data);
 
-            $this->request->data['User']['created_date'] = date('Y-m-d');
-            $this->request->data['User']['role'] = 'ServiceSeeker';
-            $name = $this->request->data['User']['name'];
-            $email = $this->request->data['User']['email'];
-
-            //creates a unique id with the $user' prefix
-            $usercode = uniqid($name);
-            $this->request->data['User']['registration_code'] = $usercode;
-            $this->request->data['User']['status'] = '0';
-
-            $this->request->data['User']['profile_visibility'] = '1';
-            $this->User->validate['email']['required'] = array(
-                'rule' => 'notEmpty',
-                'message' => 'Please Enter your email.');
-            $this->User->validate = Set::merge($this->User->validate, array(
-                'email' => array(
-                    'required' => true,
-                    'rule' => 'notEmpty',
-                    'message' => 'Please Enter your email.'
-                )
-            ));
-            $this->User->create();
-            if ($this->User->save($this->request->data)) {
-                $this->Session->setFlash('Your credentials have been saved, all the information you have provided will be kept confidential and will not be disclosed anywhere. You will be sent a validation email to confirm your account.Please check spam folder incase there is no email in inbox. Please Verify your e-mail.</br>' . $this->request->data['User']['email'], 'default', array('class' => 'success'));
-
-                $link = SITE_URL . 'users/confirm_message?email=' . $email . '&code=' . $usercode;
-                $email = $this->request->data['User']['email'];
-                $policy = SITE_URL . 'contents/Privacy_policy';
-                $emailVars = array('company_name' => COMPANY_NAME, 'verify_code' => $link, 'username' => $email, 'name' => $name, 'policy' => $policy);
-
-                $this->Useful->sendEmail($email, "Account Activation with " . COMPANY_NAME, 'signup', $emailVars);
-
-                //$this->send_mail($this->request->data['User']['email'], $this->request->data['User']['email'], $name, $link);
-
-
-                return $this->redirect(array('controller' => 'users', 'action' => 'login'));
-            } else {
-
-                $this->Session->setFlash('The user could not be saved. Please, try again.', 'default', array('class' => 'error-message'));
-            }
-
+            if($success) {
+                $this->Session->setFlash('Your credentials have been saved, all the information you have provided will be kept confidential and will not be disclosed anywhere. You will be sent a validation email to confirm your account.Please check spam folder incase there is no email in inbox. Please Verify your e-mail.',
+                    'default', array('class' => 'success'));
+            }else
+                $this->Session->setFlash('The user could not be saved. Please, try again.', 'default',array('class' => 'error-message'));
 
         }
+
         $hideSearchBar = true;
         $this->set(compact('hideSearchBar'));
     }
@@ -1244,7 +1314,7 @@ left join districts D on D.id=P.district_id
 
     public function confirm_message()
     {
-        $email = $this->params['url']['email'];
+        $email = base64_decode ($this->params['url']['email']);
         $code = $this->params['url']['code'];
 
         //$condition=array('email'=>$email,'registration_code'=>$code);
@@ -1260,7 +1330,8 @@ left join districts D on D.id=P.district_id
             if ($this->User->field('status') == '0') {
                 $this->User->saveField('status', '1');
                 $this->User->saveField('registration_code', '');
-                $this->Session->setFlash('Thank you for registering with us.Login with your credentials provided during registration.', 'default', array('class' => 'success'));
+                $this->Session->setFlash('Thank you for registering with us.Login with your credentials provided during registration.',
+                    'default', array('class' => 'success'));
 
 
                 $sms_details = $this->User->query("select sms_username,sms_password,sms_sender_id,sms_is_active from paypal_settings where id ='1'");
@@ -1287,17 +1358,21 @@ left join districts D on D.id=P.district_id
                         $response = $this->SparrowSMS->sendSMS($to, $text);
                     } else {
 
-                        $this->Session->setFlash('SMS could not be sent to Service Seeker.', 'default', array('class' => 'error-message'));
+                        $this->Session->setFlash('SMS could not be sent to Service Seeker.', 'default',
+                            array('class' => 'error-message'));
                     }
                 } else {
                     $this->Session->setFlash('SMS could not be sent.', 'default', array('class' => 'error-message'));
                 }
 
-            } else if ($this->User->field('status') == '1') {
-                $this->Session->setFlash('Your are already registered', 'default', array('class' => 'success'));
             } else {
-                //debug($this->User->field('status'));die;
-                $this->Session->setFlash('Your account has been disable by admin.Please contact admin ', 'default', array('class' => 'error-message'));
+                if ($this->User->field('status') == '1') {
+                    $this->Session->setFlash('Your are already registered', 'default', array('class' => 'success'));
+                } else {
+                    //debug($this->User->field('status'));die;
+                    $this->Session->setFlash('Your account has been disable by admin.Please contact admin ', 'default',
+                        array('class' => 'error-message'));
+                }
             }
         } else {
             $this->Session->setFlash('No record found.', 'default', array('class' => 'error-message'));
@@ -1325,14 +1400,16 @@ left join districts D on D.id=P.district_id
             $this->User->create();
             if ($this->User->save($this->request->data)) {
                 //debug('success');die;
-                $this->Session->setFlash('Your request has been sent to admin.  You will be sent a validation email to confirm your account.Please check spam folder incase there is no email in inbox.', 'default', array('class' => 'success'));
+                $this->Session->setFlash('Your request has been sent to admin.  You will be sent a validation email to confirm your account.Please check spam folder incase there is no email in inbox.',
+                    'default', array('class' => 'success'));
 
 
                 return $this->redirect(array('controller' => 'users', 'action' => 'login'));
 
             } else {
 
-                $this->Session->setFlash('The user could not be saved. Please, try again.', 'default', array('class' => 'error-message'));
+                $this->Session->setFlash('The user could not be saved. Please, try again.', 'default',
+                    array('class' => 'error-message'));
 
             }
 
@@ -1357,20 +1434,23 @@ left join districts D on D.id=P.district_id
             if ($this->User->saveField('status', '1')) {
                 $this->Session->setFlash('The user has been enabled.', 'default', array('class' => 'success'));
             } else {
-                $this->Session->setFlash('The user could not be enabled.', 'default', array('class' => 'error-message'));
+                $this->Session->setFlash('The user could not be enabled.', 'default',
+                    array('class' => 'error-message'));
             }
         } elseif ($status == 'unblock') {
             if ($this->User->saveField('status', '1')) {
                 $this->Session->setFlash('The user has been unblocked.', 'default', array('class' => 'success'));
             } else {
-                $this->Session->setFlash('The user could not be unblocked.', 'default', array('class' => 'error-message'));
+                $this->Session->setFlash('The user could not be unblocked.', 'default',
+                    array('class' => 'error-message'));
             }
 
         } elseif ($status == 'block') {
             if ($this->User->saveField('status', '2')) {
                 $this->Session->setFlash('The user has been blocked.', 'default', array('class' => 'success'));
             } else {
-                $this->Session->setFlash('The user could not be blocked.', 'default', array('class' => 'error-message'));
+                $this->Session->setFlash('The user could not be blocked.', 'default',
+                    array('class' => 'error-message'));
             }
 
         }
@@ -1381,6 +1461,7 @@ left join districts D on D.id=P.district_id
         } else {
             $this->Session->setFlash('The user could not be deleted. Please, try again.','default',array('class'=>'error-message'));
         }*/
+
         //return $this->redirect($this->request->here);
         return $this->redirect(array('action' => 'seeker_index'));
     }
@@ -1408,7 +1489,12 @@ left join districts D on D.id=P.district_id
 
                 $link = SITE_URL . 'users/confirm_message?email=' . $email . '&code=' . $usercode;
 
-                $emailVars = array('company_name' => COMPANY_NAME, 'verify_code' => $link, 'username' => $email, 'name' => $name);
+                $emailVars = array(
+                    'company_name' => COMPANY_NAME,
+                    'verify_code' => $link,
+                    'username' => $email,
+                    'name' => $name
+                );
 
                 $this->Useful->sendEmail($email, "Account Activation with " . COMPANY_NAME, 'signup', $emailVars);
 
@@ -1422,14 +1508,16 @@ left join districts D on D.id=P.district_id
             if ($this->User->saveField('status', '1')) {
                 $this->Session->setFlash('The user has been enabled.', 'default', array('class' => 'success'));
             } else {
-                $this->Session->setFlash('The user could not be enabled.', 'default', array('class' => 'error-message'));
+                $this->Session->setFlash('The user could not be enabled.', 'default',
+                    array('class' => 'error-message'));
             }
 
         } elseif ($status == 'block') {
             if ($this->User->saveField('status', '2')) {
                 $this->Session->setFlash('The user has been blocked.', 'default', array('class' => 'success'));
             } else {
-                $this->Session->setFlash('The user could not be blocked.', 'default', array('class' => 'error-message'));
+                $this->Session->setFlash('The user could not be blocked.', 'default',
+                    array('class' => 'error-message'));
             }
 
         }
@@ -1527,10 +1615,12 @@ left join districts D on D.id=P.district_id
                         $this->User->query("insert into provider_requested_documents(provider_id,title,description,document_file,uploaded_date)  values ('$provider_id','$documentId','$description','$document_insert','$uploaded_date')");
                     }
                     if ($document_insert) {
-                        move_uploaded_file($tmp_name_document, WWW_ROOT . 'providers_document/provider_requested_document/' . $document_insert);
+                        move_uploaded_file($tmp_name_document,
+                            WWW_ROOT . 'providers_document/provider_requested_document/' . $document_insert);
                     }
 
-                    $this->Session->setFlash('The documents are successsfully send to admin', 'default', array('class' => 'success'));
+                    $this->Session->setFlash('The documents are successsfully send to admin', 'default',
+                        array('class' => 'success'));
                 }
             }
 
@@ -1557,15 +1647,21 @@ left join districts D on D.id=P.district_id
         $ratingCount = $this->Useful->getProviderRating($id);
         $title_for_layout = $user['User']['name'];
 
-        $this->set(compact('user', 'ratePackages', 'serviceCategories', 'provider_id', 'ratingCount', 'title_for_layout'));
+        $this->set(compact('user', 'ratePackages', 'serviceCategories', 'provider_id', 'ratingCount',
+            'title_for_layout'));
 
         $this->loadModel('SeekerProviderRequest');
-        $history_1 = $this->SeekerProviderRequest->find('all', array('conditions' => array('service_provider_id' => $id, 'status' => 'New'), 'limit' => 5));
-        $history_2 = $this->SeekerProviderRequest->find('all', array('conditions' => array('service_provider_id' => $id, 'status' => 'Assigned'), 'limit' => 5));
-        $history_3 = $this->SeekerProviderRequest->find('all', array('conditions' => array('service_provider_id' => $id, 'status' => 'Completed'),
-            'order' => 'completed_date DESC'));
+        $history_1 = $this->SeekerProviderRequest->find('all',
+            array('conditions' => array('service_provider_id' => $id, 'status' => 'New'), 'limit' => 5));
+        $history_2 = $this->SeekerProviderRequest->find('all',
+            array('conditions' => array('service_provider_id' => $id, 'status' => 'Assigned'), 'limit' => 5));
+        $history_3 = $this->SeekerProviderRequest->find('all', array(
+            'conditions' => array('service_provider_id' => $id, 'status' => 'Completed'),
+            'order' => 'completed_date DESC'
+        ));
         $this->loadModel('Complain');
-        $complain_record = $this->Complain->find('all', array('conditions' => array('service_provider_id' => $id), 'limit' => 5));
+        $complain_record = $this->Complain->find('all',
+            array('conditions' => array('service_provider_id' => $id), 'limit' => 5));
 
         $serviceCategories = str_replace(",", "','", $serviceCategories[0][0]['title']);
         //debug($serviceCategories);die;
@@ -1576,12 +1672,14 @@ left join districts D on D.id=P.district_id
 		Left JOIN service_categories SC on PSC.service_categories_id= SC.id where User.role='Serviceprovider' and User.id!='$id' and  SC.title in('$serviceCategories') group by User.id ORDER BY User.created_date ASC LIMIT 5");
 
         $this->loadModel('Review');
-        $review_record = $this->Review->find('all', array('conditions' => array('service_provider_id' => $id, 'is_active' => '1')));
+        $review_record = $this->Review->find('all',
+            array('conditions' => array('service_provider_id' => $id, 'is_active' => '1')));
 
 
         //debug($previousId);
         //debug($review_record);die;
-        $this->set(compact('history_1', 'history_2', 'history_3', 'deposit_record', 'complain_record', 'provider_records', 'review_record', 'previousId', 'user_place'));
+        $this->set(compact('history_1', 'history_2', 'history_3', 'deposit_record', 'complain_record',
+            'provider_records', 'review_record', 'previousId', 'user_place'));
 
 
     }
@@ -1613,15 +1711,21 @@ left join districts D on D.id=P.district_id
         $ratingCount = $this->Useful->getProviderRating($id);
         $title_for_layout = $user['User']['name'];
 
-        $this->set(compact('user', 'ratePackages', 'serviceCategories', 'provider_id', 'ratingCount', 'title_for_layout'));
+        $this->set(compact('user', 'ratePackages', 'serviceCategories', 'provider_id', 'ratingCount',
+            'title_for_layout'));
 
         $this->loadModel('SeekerProviderRequest');
-        $history_1 = $this->SeekerProviderRequest->find('all', array('conditions' => array('service_provider_id' => $id, 'status' => 'New'), 'limit' => 5));
-        $history_2 = $this->SeekerProviderRequest->find('all', array('conditions' => array('service_provider_id' => $id, 'status' => 'Assigned'), 'limit' => 5));
-        $history_3 = $this->SeekerProviderRequest->find('all', array('conditions' => array('service_provider_id' => $id, 'status' => 'Completed'),
-            'order' => 'completed_date DESC'));
+        $history_1 = $this->SeekerProviderRequest->find('all',
+            array('conditions' => array('service_provider_id' => $id, 'status' => 'New'), 'limit' => 5));
+        $history_2 = $this->SeekerProviderRequest->find('all',
+            array('conditions' => array('service_provider_id' => $id, 'status' => 'Assigned'), 'limit' => 5));
+        $history_3 = $this->SeekerProviderRequest->find('all', array(
+            'conditions' => array('service_provider_id' => $id, 'status' => 'Completed'),
+            'order' => 'completed_date DESC'
+        ));
         $this->loadModel('Complain');
-        $complain_record = $this->Complain->find('all', array('conditions' => array('service_provider_id' => $id), 'limit' => 5));
+        $complain_record = $this->Complain->find('all',
+            array('conditions' => array('service_provider_id' => $id), 'limit' => 5));
 
         $serviceCategories = str_replace(",", "','", $serviceCategories[0][0]['title']);
         //debug($serviceCategories);die;
@@ -1637,12 +1741,14 @@ left join districts D on D.id=P.district_id
 		Left JOIN service_categories SC on PSC.service_categories_id= SC.id where User.role='Serviceprovider' and User.id!='$id' and  SC.title in('$serviceCategories') group by User.id ORDER BY User.created_date ASC LIMIT 6");
 
         $this->loadModel('Review');
-        $review_record = $this->Review->find('all', array('conditions' => array('service_provider_id' => $id, 'is_active' => '1')));
+        $review_record = $this->Review->find('all',
+            array('conditions' => array('service_provider_id' => $id, 'is_active' => '1')));
 
 
         //debug($previousId);
         //debug($review_record);die;
-        $this->set(compact('history_1', 'history_2', 'history_3', 'deposit_record', 'complain_record', 'provider_records', 'review_record', 'previousId', 'user_place'));
+        $this->set(compact('history_1', 'history_2', 'history_3', 'deposit_record', 'complain_record',
+            'provider_records', 'review_record', 'previousId', 'user_place'));
 
 
     }
@@ -1664,15 +1770,30 @@ left join districts D on D.id=P.district_id
         //echo "SELECT title FROM `service_categories` inner join provider_service_categories on provider_service_categories.service_categories_id= service_categories.id where provider_service_categories.user_id={$id}";
         //debug($serviceCategories);exit;
         $this->loadModel('SeekerProviderRequest');
-        $history_1 = $this->SeekerProviderRequest->find('all', array('conditions' => array('service_provider_id' => $id, 'status' => 'New'), 'limit' => 5, 'order' => 'created_date DESC'));
-        $history_2 = $this->SeekerProviderRequest->find('all', array('conditions' => array('service_provider_id' => $id, 'status' => 'Assigned'), 'limit' => 5, 'order' => 'assigned_date DESC'));
-        $history_3 = $this->SeekerProviderRequest->find('all', array('conditions' => array('service_provider_id' => $id, 'status' => 'Completed'), 'limit' => 5, 'order' => 'completed_date DESC'));
+        $history_1 = $this->SeekerProviderRequest->find('all', array(
+            'conditions' => array('service_provider_id' => $id, 'status' => 'New'),
+            'limit' => 5,
+            'order' => 'created_date DESC'
+        ));
+        $history_2 = $this->SeekerProviderRequest->find('all', array(
+            'conditions' => array('service_provider_id' => $id, 'status' => 'Assigned'),
+            'limit' => 5,
+            'order' => 'assigned_date DESC'
+        ));
+        $history_3 = $this->SeekerProviderRequest->find('all', array(
+            'conditions' => array('service_provider_id' => $id, 'status' => 'Completed'),
+            'limit' => 5,
+            'order' => 'completed_date DESC'
+        ));
         $this->loadModel('Complain');
-        $complain_record = $this->Complain->find('all', array('conditions' => array('service_provider_id' => $id), 'limit' => 5, 'order' => 'complain_date DESC'));
+        $complain_record = $this->Complain->find('all',
+            array('conditions' => array('service_provider_id' => $id), 'limit' => 5, 'order' => 'complain_date DESC'));
 
         $this->loadModel('Review');
-        $review_record = $this->Review->find('all', array('conditions' => array('service_provider_id' => $id), 'limit' => 5, 'order' => 'review_date DESC'));
-        $this->set(compact('history_1', 'history_2', 'history_3', 'deposit_record', 'complain_record', 'review_record'));
+        $review_record = $this->Review->find('all',
+            array('conditions' => array('service_provider_id' => $id), 'limit' => 5, 'order' => 'review_date DESC'));
+        $this->set(compact('history_1', 'history_2', 'history_3', 'deposit_record', 'complain_record',
+            'review_record'));
 
         $this->set(compact('ratePackages', 'serviceCategories'));
 
@@ -1685,19 +1806,35 @@ left join districts D on D.id=P.district_id
         }
 
         $this->loadModel('SeekerProviderRequest');
-        $history_1 = $this->SeekerProviderRequest->find('all', array('conditions' => array('service_seeker_id' => $id, 'status' => 'New'), 'limit' => 5, 'order' => 'created_date DESC'));
-        $history_2 = $this->SeekerProviderRequest->find('all', array('conditions' => array('service_seeker_id' => $id, 'status' => 'Assigned'), 'limit' => 5, 'order' => 'assigned_date DESC'));
-        $history_3 = $this->SeekerProviderRequest->find('all', array('conditions' => array('service_seeker_id' => $id, 'status' => 'Completed'), 'limit' => 5, 'order' => 'completed_date DESC'));
+        $history_1 = $this->SeekerProviderRequest->find('all', array(
+            'conditions' => array('service_seeker_id' => $id, 'status' => 'New'),
+            'limit' => 5,
+            'order' => 'created_date DESC'
+        ));
+        $history_2 = $this->SeekerProviderRequest->find('all', array(
+            'conditions' => array('service_seeker_id' => $id, 'status' => 'Assigned'),
+            'limit' => 5,
+            'order' => 'assigned_date DESC'
+        ));
+        $history_3 = $this->SeekerProviderRequest->find('all', array(
+            'conditions' => array('service_seeker_id' => $id, 'status' => 'Completed'),
+            'limit' => 5,
+            'order' => 'completed_date DESC'
+        ));
         $this->loadModel('ServiceSeekerDeposit');
-        $deposit_record = $this->ServiceSeekerDeposit->find('all', array('conditions' => array('user_id' => $id), 'limit' => 5, 'order' => 'deposited_date DESC'));
+        $deposit_record = $this->ServiceSeekerDeposit->find('all',
+            array('conditions' => array('user_id' => $id), 'limit' => 5, 'order' => 'deposited_date DESC'));
         $this->loadModel('Complain');
-        $complain_record = $this->Complain->find('all', array('conditions' => array('service_seeker_id' => $id), 'limit' => 5, 'order' => 'complain_date DESC'));
+        $complain_record = $this->Complain->find('all',
+            array('conditions' => array('service_seeker_id' => $id), 'limit' => 5, 'order' => 'complain_date DESC'));
         $this->loadModel('Review');
-        $review_record = $this->Review->find('all', array('conditions' => array('service_seeker_id' => $id), 'limit' => 5, 'order' => 'review_date DESC'));
+        $review_record = $this->Review->find('all',
+            array('conditions' => array('service_seeker_id' => $id), 'limit' => 5, 'order' => 'review_date DESC'));
 
         $userOptions = array('conditions' => array('User.' . $this->User->primaryKey => $id));
         $users = $this->set('user', $this->User->find('first', $userOptions));
-        $this->set(compact('history_1', 'history_2', 'history_3', 'deposit_record', 'complain_record', 'review_record'));
+        $this->set(compact('history_1', 'history_2', 'history_3', 'deposit_record', 'complain_record',
+            'review_record'));
 
     }
 
@@ -1709,21 +1846,33 @@ left join districts D on D.id=P.district_id
             throw new NotFoundException(__('Invalid user'));
         }
         $this->loadModel('SeekerProviderRequest');
-        $history_1 = $this->SeekerProviderRequest->find('all', array('conditions' => array('service_seeker_id' => $this->Auth->User('id'), 'status' => 'New'),
-            'order' => 'created_date DESC'));
-        $history_2 = $this->SeekerProviderRequest->find('all', array('conditions' => array('service_seeker_id' => $this->Auth->User('id'), 'status' => 'Assigned'),
-            'order' => 'assigned_date DESC'));
-        $history_3 = $this->SeekerProviderRequest->find('all', array('conditions' => array('service_seeker_id' => $this->Auth->User('id'), 'status' => 'Completed'),
-            'order' => 'completed_date DESC'));
+        $history_1 = $this->SeekerProviderRequest->find('all', array(
+            'conditions' => array('service_seeker_id' => $this->Auth->User('id'), 'status' => 'New'),
+            'order' => 'created_date DESC'
+        ));
+        $history_2 = $this->SeekerProviderRequest->find('all', array(
+            'conditions' => array('service_seeker_id' => $this->Auth->User('id'), 'status' => 'Assigned'),
+            'order' => 'assigned_date DESC'
+        ));
+        $history_3 = $this->SeekerProviderRequest->find('all', array(
+            'conditions' => array('service_seeker_id' => $this->Auth->User('id'), 'status' => 'Completed'),
+            'order' => 'completed_date DESC'
+        ));
         $this->loadModel('ServiceSeekerDeposit');
-        $deposit_record = $this->ServiceSeekerDeposit->find('all', array('conditions' => array('user_id' => $this->Auth->User('id')),
-            'order' => 'deposited_date DESC'));
+        $deposit_record = $this->ServiceSeekerDeposit->find('all', array(
+            'conditions' => array('user_id' => $this->Auth->User('id')),
+            'order' => 'deposited_date DESC'
+        ));
         $this->loadModel('Complain');
-        $complain_record = $this->Complain->find('all', array('conditions' => array('service_seeker_id' => $this->Auth->User('id')),
-            'order' => 'complain_date DESC'));
+        $complain_record = $this->Complain->find('all', array(
+            'conditions' => array('service_seeker_id' => $this->Auth->User('id')),
+            'order' => 'complain_date DESC'
+        ));
         $this->loadModel('Review');
-        $review_record = $this->Review->find('all', array('conditions' => array('service_seeker_id' => $this->Auth->User('id'), 'is_active' => '1'),
-            'order' => 'review_date DESC'));
+        $review_record = $this->Review->find('all', array(
+            'conditions' => array('service_seeker_id' => $this->Auth->User('id'), 'is_active' => '1'),
+            'order' => 'review_date DESC'
+        ));
 
         $options = array('conditions' => array('User.' . $this->User->primaryKey => $id));
         $user = $this->User->find('first', $options);
@@ -1735,7 +1884,9 @@ left join districts D on D.id=P.district_id
         $hideSearchBar = true;
         $active_seeker_profile = "active";
         $page_title = $user['User']['name'] . "'s Profile";
-        $this->set(compact('active_seeker_profile', 'page_title', 'hideSearchBar', 'history_1', 'history_2', 'history_3', 'deposit_record', 'complain_record', 'review_record', 'getDepositDetail', 'settings', 'testimonial', 'testimonial_existance'));
+        $this->set(compact('active_seeker_profile', 'page_title', 'hideSearchBar', 'history_1', 'history_2',
+            'history_3', 'deposit_record', 'complain_record', 'review_record', 'getDepositDetail', 'settings',
+            'testimonial', 'testimonial_existance'));
 
     }
 
@@ -1759,9 +1910,11 @@ left join districts D on D.id=P.district_id
             $this->User->create();
             if ($this->User->save($this->request->data)) {
                 $this->Session->setFlash('The user has been saved.', 'default', array('class' => 'success'));
+
                 return $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash('The user could not be saved. Please, try again.', 'default', array('class' => 'error-message'));
+                $this->Session->setFlash('The user could not be saved. Please, try again.', 'default',
+                    array('class' => 'error-message'));
             }
         }
     }
@@ -1802,9 +1955,14 @@ left join districts D on D.id=P.district_id
                     move_uploaded_file($tmp_name, WWW_ROOT . 'providers_photo/' . $name);
 
                     $this->PhpThumb->thumbnail('providers_photo/' . $name, array(
-                        'w' => 140, 'h' => 140, 'zc' => 1));
+                        'w' => 140,
+                        'h' => 140,
+                        'zc' => 1
+                    ));
                     $this->PhpCustom->thumbnail('providers_photo/' . $name, array(
-                        'w' => 200, 'zc' => 1));
+                        'w' => 200,
+                        'zc' => 1
+                    ));
                 }
 
                 //add rate:
@@ -1938,7 +2096,8 @@ left join districts D on D.id=P.district_id
 
                 return $this->redirect(array('action' => 'provider_index'));
             } else {
-                $this->Session->setFlash('The user could not be saved. Please, try again.', 'default', array('class' => 'error-message'));
+                $this->Session->setFlash('The user could not be saved. Please, try again.', 'default',
+                    array('class' => 'error-message'));
             }
         }
 
@@ -1950,8 +2109,13 @@ left join districts D on D.id=P.district_id
         //$serviceCategoryOptions = array('order by ServiceCategory.title desc');
         ///$this->ServiceCategory->order = 'title ASC';
         //$serviceCategories = $this->ServiceCategory->generateTreeList(null,null,null,'&nbsp;&nbsp;&nbsp;');
-        $serviceCategories = $this->ServiceCategory->find('threaded', array('conditions' => array('ServiceCategory.is_active' => 1), 'order' => 'ServiceCategory.title', 'parent' => 'parent_id'));
-        $countServiceCategory = $this->ServiceCategory->find('count', array('conditions' => array('ServiceCategory.is_active' => 1)));
+        $serviceCategories = $this->ServiceCategory->find('threaded', array(
+            'conditions' => array('ServiceCategory.is_active' => 1),
+            'order' => 'ServiceCategory.title',
+            'parent' => 'parent_id'
+        ));
+        $countServiceCategory = $this->ServiceCategory->find('count',
+            array('conditions' => array('ServiceCategory.is_active' => 1)));
 
         $this->loadModel('ServiceProviderDocument');
         $documentPackages = $this->ServiceProviderDocument->find('all');
@@ -1976,7 +2140,8 @@ left join districts D on D.id=P.district_id
         }
 
         //debug($country);die;
-        $this->set(compact('categories', 'serviceCategories', 'documentPackages', 'country', 'getPlace', 'getCompany', 'countServiceCategory'));
+        $this->set(compact('categories', 'serviceCategories', 'documentPackages', 'country', 'getPlace', 'getCompany',
+            'countServiceCategory'));
     }
 
     public function admin_load_category($id = null)
@@ -1991,7 +2156,11 @@ left join districts D on D.id=P.district_id
         $this->loadModel('ServiceCategory');
         if (!empty($id)) {
 
-            $serviceCategories = $this->ServiceCategory->find('threaded', array('conditions' => array('ServiceCategory.is_active' => 1), 'order' => 'ServiceCategory.title', 'parent' => 'parent_id'));
+            $serviceCategories = $this->ServiceCategory->find('threaded', array(
+                'conditions' => array('ServiceCategory.is_active' => 1),
+                'order' => 'ServiceCategory.title',
+                'parent' => 'parent_id'
+            ));
 
             $checkedArray = array();
             foreach ($user_details['ProviderServiceCategory'] as $Categories) {
@@ -1999,7 +2168,11 @@ left join districts D on D.id=P.district_id
             }
 
         } else {
-            $serviceCategories = $this->ServiceCategory->find('threaded', array('conditions' => array('ServiceCategory.is_active' => 1), 'order' => 'ServiceCategory.title', 'parent' => 'parent_id'));
+            $serviceCategories = $this->ServiceCategory->find('threaded', array(
+                'conditions' => array('ServiceCategory.is_active' => 1),
+                'order' => 'ServiceCategory.title',
+                'parent' => 'parent_id'
+            ));
 
             $checkedArray[] = null;
 
@@ -2031,7 +2204,12 @@ left join districts D on D.id=P.district_id
             if ($user_details['User']['place_id'] > 0) {
                 $getPlaces = $this->User->query("select Place.id,concat_ws(' - ',Place.name,District.name) PlaceName from places as Place
 	inner join districts as District on District.id=Place.district_id where Place.id='" . $user_details['User']['place_id'] . "'");
-                $placeDistrict = array(array('id' => $getPlaces[0]['Place']['id'], 'name' => $getPlaces[0][0]['PlaceName']));
+                $placeDistrict = array(
+                    array(
+                        'id' => $getPlaces[0]['Place']['id'],
+                        'name' => $getPlaces[0][0]['PlaceName']
+                    )
+                );
 
             } else {
                 $placeDistrict = '';
@@ -2064,6 +2242,7 @@ left join districts D on D.id=P.district_id
             //debug($this->request);
             //$places=$this->request->query['q'];
             $getPlace = $this->Useful->PlaceSuggestionList($this->request->query['q']);
+
             return json_encode($getPlace);
             //exit;
         }
@@ -2092,9 +2271,11 @@ left join districts D on D.id=P.district_id
                     $this->Session->setFlash('Unable to upload photo.', 'default', array('class' => 'error-message'));
                 }
                 $this->Session->setFlash('The user has been saved.', 'default', array('class' => 'success'));
+
                 return $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash('The user could not be saved. Please, try again.', 'default', array('class' => 'error-message'));
+                $this->Session->setFlash('The user could not be saved. Please, try again.', 'default',
+                    array('class' => 'error-message'));
             }
         }
     }
@@ -2137,9 +2318,14 @@ left join districts D on D.id=P.district_id
                     move_uploaded_file($tmp_name, WWW_ROOT . 'providers_photo/' . $name);
 
                     $this->PhpThumb->thumbnail('providers_photo/' . $name, array(
-                        'w' => 140, 'h' => 140, 'zc' => 1));
+                        'w' => 140,
+                        'h' => 140,
+                        'zc' => 1
+                    ));
                     $this->PhpCustom->thumbnail('providers_photo/' . $name, array(
-                        'w' => 200, 'zc' => 1));
+                        'w' => 200,
+                        'zc' => 1
+                    ));
                 }
 
                 /*//add additional experience to services table
@@ -2266,10 +2452,12 @@ left join districts D on D.id=P.district_id
                     }else{
                         $this->Session->setFlash('SMS could not be sent.','default',array('class'=>'error-message'));
                     }*/
+
                 return $this->redirect(array('action' => 'provider_index'));
             } else {
                 //debug($this->validationErrors);die;
-                $this->Session->setFlash('The user could not be saved. Please, try again.', 'default', array('class' => 'error-message'));
+                $this->Session->setFlash('The user could not be saved. Please, try again.', 'default',
+                    array('class' => 'error-message'));
             }
         }
 
@@ -2279,8 +2467,13 @@ left join districts D on D.id=P.district_id
 
         $this->loadModel('ServiceCategory');
 
-        $serviceCategories = $this->ServiceCategory->find('threaded', array('conditions' => array('ServiceCategory.is_active' => 1), 'order' => 'ServiceCategory.title', 'parent' => 'parent_id'));
-        $countServiceCategory = $this->ServiceCategory->find('count', array('conditions' => array('ServiceCategory.is_active' => 1)));
+        $serviceCategories = $this->ServiceCategory->find('threaded', array(
+            'conditions' => array('ServiceCategory.is_active' => 1),
+            'order' => 'ServiceCategory.title',
+            'parent' => 'parent_id'
+        ));
+        $countServiceCategory = $this->ServiceCategory->find('count',
+            array('conditions' => array('ServiceCategory.is_active' => 1)));
         //debug($serviceCategories);
         $this->loadModel('ServiceProviderDocument');
         $documentPackages = $this->ServiceProviderDocument->find('all');
@@ -2302,7 +2495,8 @@ left join districts D on D.id=P.district_id
             $this->set(compact('parents'));
         }
         //debug($country);die;
-        $this->set(compact('categories', 'serviceCategories', 'countServiceCategory', 'documentPackages', 'country', 'getPlace'));
+        $this->set(compact('categories', 'serviceCategories', 'countServiceCategory', 'documentPackages', 'country',
+            'getPlace'));
     }
 
 
@@ -2339,9 +2533,11 @@ left join districts D on D.id=P.district_id
             if ($this->User->save($this->request->data)) {
 
                 $this->Session->setFlash('The user has been updated.', 'default', array('class' => 'success'));
+
                 return $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash('The user could not be updated. Please, try again.', 'default', array('class' => 'error-message'));
+                $this->Session->setFlash('The user could not be updated. Please, try again.', 'default',
+                    array('class' => 'error-message'));
             }
         } else {
             $options = array('conditions' => array('User.' . $this->User->primaryKey => $id));
@@ -2389,9 +2585,14 @@ left join districts D on D.id=P.district_id
                     move_uploaded_file($tmp_profile_image, WWW_ROOT . 'providers_photo/' . $profile_image);
 
                     $this->PhpThumb->thumbnail('providers_photo/' . $profile_image, array(
-                        'w' => 140, 'h' => 140, 'zc' => 1));
+                        'w' => 140,
+                        'h' => 140,
+                        'zc' => 1
+                    ));
                     $this->PhpCustom->thumbnail('providers_photo/' . $profile_image, array(
-                        'w' => 200, 'zc' => 1));
+                        'w' => 200,
+                        'zc' => 1
+                    ));
 
                     @unlink(WWW_ROOT . 'providers_photo/' . $photo_to_delete);
                     @unlink(WWW_ROOT . 'providers_photo/thumbs/' . $photo_to_delete);
@@ -2492,12 +2693,14 @@ left join districts D on D.id=P.district_id
 
                 }
                 $this->Session->setFlash('The user has been saved.', 'default', array('class' => 'success'));
+
                 return $this->redirect(array('action' => 'provider_index'));
             } else {
                 $options = array('conditions' => array('User.' . $this->User->primaryKey => $id));
                 $this->request->data = $this->User->find('first', $options);
                 $this->set('user', $this->request->data);
-                $this->Session->setFlash('The user could not be saved. Please, try again.', 'default', array('class' => 'error-message'));
+                $this->Session->setFlash('The user could not be saved. Please, try again.', 'default',
+                    array('class' => 'error-message'));
             }
             $this->data = $this->User->read(null, $id);
         } else {
@@ -2527,7 +2730,11 @@ left join districts D on D.id=P.district_id
         $serviceCategories = $this->ServiceCategory->generateTreeList(null,null,null,'&nbsp;&nbsp;&nbsp;');*/
 
         $this->loadModel('ServiceCategory');
-        $serviceCategories = $this->ServiceCategory->find('threaded', array('conditions' => array('ServiceCategory.is_active' => 1), 'order' => 'ServiceCategory.title', 'parent' => 'parent_id'));
+        $serviceCategories = $this->ServiceCategory->find('threaded', array(
+            'conditions' => array('ServiceCategory.is_active' => 1),
+            'order' => 'ServiceCategory.title',
+            'parent' => 'parent_id'
+        ));
 
         //debug($serviceCategories);
         $this->loadModel('ServiceProviderDocument');
@@ -2551,7 +2758,12 @@ left join districts D on D.id=P.district_id
         if ($user_details['User']['place_id'] > 0) {
             $getPlaces = $this->User->query("select Place.id,concat_ws(' - ',Place.name,District.name) PlaceName from places as Place
 	inner join districts as District on District.id=Place.district_id where Place.id='" . $user_details['User']['place_id'] . "'");
-            $placeDistrict = array(array('id' => $getPlaces[0]['Place']['id'], 'name' => $getPlaces[0][0]['PlaceName']));
+            $placeDistrict = array(
+                array(
+                    'id' => $getPlaces[0]['Place']['id'],
+                    'name' => $getPlaces[0][0]['PlaceName']
+                )
+            );
 
         } else {
             $placeDistrict = '';
@@ -2562,7 +2774,9 @@ left join districts D on D.id=P.district_id
 
         $company = $this->Useful->company_name($this->request->data['User']['Involved_company']);
 
-        $this->set(compact('categories', 'user_details', 'serviceCategories', 'ratePackages', 'checkedArray', 'documentPackages', 'documents', 'document', 'country', 'placeDistrict', 'getPlace', 'getCompany', 'company'));
+        $this->set(compact('categories', 'user_details', 'serviceCategories', 'ratePackages', 'checkedArray',
+            'documentPackages', 'documents', 'document', 'country', 'placeDistrict', 'getPlace', 'getCompany',
+            'company'));
         //$this->render('provider_edit');
     }
 
@@ -2608,9 +2822,14 @@ left join districts D on D.id=P.district_id
                     move_uploaded_file($tmp_profile_image, WWW_ROOT . 'providers_photo/' . $profile_image);
 
                     $this->PhpThumb->thumbnail('providers_photo/' . $profile_image, array(
-                        'w' => 140, 'h' => 140, 'zc' => 1));
+                        'w' => 140,
+                        'h' => 140,
+                        'zc' => 1
+                    ));
                     $this->PhpCustom->thumbnail('providers_photo/' . $profile_image, array(
-                        'w' => 200, 'zc' => 1));
+                        'w' => 200,
+                        'zc' => 1
+                    ));
 
                     @unlink(WWW_ROOT . 'providers_photo/' . $photo_to_delete);
                     @unlink(WWW_ROOT . 'providers_photo/thumbs/' . $photo_to_delete);
@@ -2714,12 +2933,14 @@ left join districts D on D.id=P.district_id
 
                 }
                 $this->Session->setFlash('The user has been saved.', 'default', array('class' => 'success'));
+
                 return $this->redirect(array('action' => 'provider_index'));
             } else {
                 $options = array('conditions' => array('User.' . $this->User->primaryKey => $id));
                 $this->request->data = $this->User->find('first', $options);
                 $this->set('user', $this->request->data);
-                $this->Session->setFlash('The user could not be saved. Please, try again.', 'default', array('class' => 'error-message'));
+                $this->Session->setFlash('The user could not be saved. Please, try again.', 'default',
+                    array('class' => 'error-message'));
             }
             $this->data = $this->User->read(null, $id);
         } else {
@@ -2761,7 +2982,11 @@ left join districts D on D.id=P.district_id
         //debug($ratePackages);exit;
 
         $this->loadModel('ServiceCategory');
-        $serviceCategories = $this->ServiceCategory->find('threaded', array('conditions' => array('ServiceCategory.is_active' => 1), 'order' => 'ServiceCategory.title', 'parent' => 'parent_id'));
+        $serviceCategories = $this->ServiceCategory->find('threaded', array(
+            'conditions' => array('ServiceCategory.is_active' => 1),
+            'order' => 'ServiceCategory.title',
+            'parent' => 'parent_id'
+        ));
 
         /*$this->loadModel('ServiceCategory');
         $serviceCategories = $this->ServiceCategory->generateTreeList(null,null,null,'&nbsp;&nbsp;&nbsp;');*/
@@ -2788,7 +3013,12 @@ left join districts D on D.id=P.district_id
         if ($user_details['User']['place_id'] > 0) {
             $getPlaces = $this->User->query("select Place.id,concat_ws(' - ',Place.name,District.name) PlaceName from places as Place
 	inner join districts as District on District.id=Place.district_id where Place.id='" . $user_details['User']['place_id'] . "'");
-            $placeDistrict = array(array('id' => $getPlaces[0]['Place']['id'], 'name' => $getPlaces[0][0]['PlaceName']));
+            $placeDistrict = array(
+                array(
+                    'id' => $getPlaces[0]['Place']['id'],
+                    'name' => $getPlaces[0][0]['PlaceName']
+                )
+            );
 
         } else {
             $placeDistrict = '';
@@ -2796,7 +3026,8 @@ left join districts D on D.id=P.district_id
         $getPlace = $this->Useful->getPlaceSuggestionList();
 
 
-        $this->set(compact('categories', 'user_details', 'serviceCategories', 'ratePackages', 'checkedArray', 'documentPackages', 'documents', 'document', 'country', 'placeDistrict', 'getPlace'));
+        $this->set(compact('categories', 'user_details', 'serviceCategories', 'ratePackages', 'checkedArray',
+            'documentPackages', 'documents', 'document', 'country', 'placeDistrict', 'getPlace'));
         //$this->render('provider_edit');
     }
 
@@ -2822,8 +3053,10 @@ left join districts D on D.id=P.district_id
             //@unlink(WWW_ROOT.'providers_document'.$doc['User']['doc_name_'.$i]['name']);
             $this->Session->setFlash('The user has been deleted.', 'default', array('class' => 'success'));
         } else {
-            $this->Session->setFlash('The user could not be deleted. Please, try again.', 'default', array('class' => 'error-message'));
+            $this->Session->setFlash('The user could not be deleted. Please, try again.', 'default',
+                array('class' => 'error-message'));
         }
+
         return $this->redirect(array('action' => 'index'));
     }
 
@@ -2841,13 +3074,15 @@ left join districts D on D.id=P.district_id
             if ($this->User->saveField('status', '1')) {
                 $this->Session->setFlash('The user has been enabled.', 'default', array('class' => 'success'));
             } else {
-                $this->Session->setFlash('The user could not be enabled.', 'default', array('class' => 'error-message'));
+                $this->Session->setFlash('The user could not be enabled.', 'default',
+                    array('class' => 'error-message'));
             }
         } elseif ($status == 'disable') {
             if ($this->User->saveField('status', '0')) {
                 $this->Session->setFlash('The user has been disabled.', 'default', array('class' => 'success'));
             } else {
-                $this->Session->setFlash('The user could not be disabled.', 'default', array('class' => 'error-message'));
+                $this->Session->setFlash('The user could not be disabled.', 'default',
+                    array('class' => 'error-message'));
             }
 
         }
@@ -2857,6 +3092,7 @@ left join districts D on D.id=P.district_id
         } else {
             $this->Session->setFlash('The user could not be deleted. Please, try again.','default',array('class'=>'error-message'));
         }*/
+
         //return $this->redirect($this->request->here);
         return $this->redirect(array('action' => 'index'));
     }
@@ -2886,8 +3122,10 @@ left join districts D on D.id=P.district_id
             }
             $this->Session->setFlash('The user has been deleted.', 'default', array('class' => 'success'));
         } else {
-            $this->Session->setFlash('The user could not be deleted. Please, try again.', 'default', array('class' => 'error-message'));
+            $this->Session->setFlash('The user could not be deleted. Please, try again.', 'default',
+                array('class' => 'error-message'));
         }
+
         return $this->redirect(array('action' => 'admin_provider_index'));
 
     }
@@ -2902,7 +3140,12 @@ left join districts D on D.id=P.district_id
         $from = MAIL_FROM;
         $Email = new CakeEmail();
         $Email->config('default');
-        $Email->viewVars(array('company_name' => COMPANY_NAME, 'verify_code' => $verify_code, 'username' => $username, 'name' => $name));
+        $Email->viewVars(array(
+            'company_name' => COMPANY_NAME,
+            'verify_code' => $verify_code,
+            'username' => $username,
+            'name' => $name
+        ));
         $Email->from(array($from => COMPANY_NAME))
             ->to($to)
             ->subject('Account Activation with trilordMarket.')
@@ -2923,7 +3166,14 @@ left join districts D on D.id=P.district_id
         //$result = $this->_send_email($from,$get_email,$token_url);
         $Email = new CakeEmail();
         $Email->config('default');
-        $Email->viewVars(array('company_name' => $this->Useful->getCompanyName(), 'user_name' => $user_name, 'user_info' => $user_info, 'trilord_email' => $trilord_email, 'policy' => $policy, 'user_agreement' => $user_agreement));
+        $Email->viewVars(array(
+            'company_name' => $this->Useful->getCompanyName(),
+            'user_name' => $user_name,
+            'user_info' => $user_info,
+            'trilord_email' => $trilord_email,
+            'policy' => $policy,
+            'user_agreement' => $user_agreement
+        ));
         $Email->from(array($from => $this->Useful->getCompanyName()))
             ->to($to)
             ->subject('Profile Updated')
@@ -2954,7 +3204,11 @@ left join districts D on D.id=P.district_id
         $digit = substr($phone, -6);
 
 
-        $user_info = $this->User->find('first', array('recursive' => '-1', 'fields' => array('issue_date', 'expire_date'), 'conditions' => array('id' => $id)));
+        $user_info = $this->User->find('first', array(
+            'recursive' => '-1',
+            'fields' => array('issue_date', 'expire_date'),
+            'conditions' => array('id' => $id)
+        ));
         if ($user_info['User']['issue_date'] != '0000-00-00') {
             $from = $user_info['User']['issue_date'];
         } else {
@@ -3025,9 +3279,11 @@ left join districts D on D.id=P.district_id
             if ($this->User->save($this->request->data)) {
 
                 $this->Session->setFlash('User information has been saved.', 'default', array('class' => 'success'));
+
                 return $this->redirect(array('action' => 'provider_index'));
             } else {
-                $this->Session->setFlash('User information could not be saved. Please, try again.', 'default', array('class' => 'error-message'));
+                $this->Session->setFlash('User information could not be saved. Please, try again.', 'default',
+                    array('class' => 'error-message'));
             }
         }
     }
@@ -3041,6 +3297,7 @@ left join districts D on D.id=P.district_id
         } else {
             $user_card_id = $user_card_id;
         }
+
         return $user_card_id;
     }
 

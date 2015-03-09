@@ -75,16 +75,6 @@ class SparrowSMSComponent extends Component{
 
         );
         $api_url = "http://api.sparrowsms.com/call_in.php?".$postdata;
-        /*$opts = array('http' =>
-            array(
-                'method'  => 'POST',
-                'header'  => 'Content-type: application/x-www-form-urlencoded',
-                'content' => $postdata
-            )
-        );*/
-
-        /*$context  = stream_context_create($opts);
-        $response = file_get_contents(self::API_HTTP_URL.'sendmsg', false, $context);*/
         $response = file_get_contents($api_url);
         return $response;
     }

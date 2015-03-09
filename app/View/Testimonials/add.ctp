@@ -3,8 +3,10 @@
     <?php echo $this->Session->flash(); ?>
 
     <div class="row container-content">
+
         <div class="col-md-9 col-xs-12">
 		    <p>Please note, fields marked with (*) are mandatory!</p>
+
 			<?php echo $this->Form->create('Testimonial', array('class'=>"post-resume-form")); ?>
 				<?php echo $this->Session->flash(); ?>
 				<?php
@@ -19,6 +21,7 @@
 			?>
 	
 	    </div> <!-- end .grid -->
+
 	</div> <!-- .container-content -->
 
-</div> <!-- end .user-profile-edit-container -->
+</div> <!-- end .testimonial-container -->

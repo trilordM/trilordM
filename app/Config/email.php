@@ -41,10 +41,12 @@
 class EmailConfig {
 
 	public $default = array(
-		'transport' => 'Mail',
-		'from' => 'ritesh@smarttech.com.np',
-		//'charset' => 'utf-8',
-		//'headerCharset' => 'utf-8',
+        'host' => 'ssl://smtp.gmail.com',
+        'port' => 465,
+        'username' => 'shashi.gharti@gmail.com',
+        'password' => '=0{Y=iS0l-9{naQ',
+        'transport' => 'Smtp',
+        'timeout' => 30
 	);
 
 	public $smtp = array(

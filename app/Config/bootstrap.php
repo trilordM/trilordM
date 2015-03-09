@@ -110,6 +110,9 @@ CakePlugin::loadAll();
 
 //CakePlugin::load('Paypal');
 
+/**
+ *
+ */
 define('SITE_URL','http://'.$_SERVER['HTTP_HOST'].'/');
 define('USDTONRS','95');
 define('STATUS_HISTORY',serialize(array('0'=>'Old','1'=>'New')));
@@ -122,3 +125,12 @@ define('COMPANY_NAME','trilordMARKET');
 define('FACEBOOK_URL','https://www.facebook.com/pages/TrilordMarket/160643644141973');
 define('TWITER_URL','https://twitter.com/TrilordMarket');
 define('GOOGLEPLUS_URL','');
+
+/**
+ * Attach Listener for Event
+ */
+App::uses('ClassRegistry', 'Utility');
+App::uses('UserListener', 'Event');
+
+$user = ClassRegistry::init('User');
+$user->getEventManager()->attach(new UserListener());

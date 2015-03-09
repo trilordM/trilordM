@@ -48,10 +48,10 @@
 
                         <h4><a href="#"><?php echo $this->Html->link($users[0]['__name'],array('controller' => 'users', 'action' => 'provider',$users[0]['__id']));?></a></h4>
 
-                        <h5><?php $serviceCategories=str_replace(",",", ",$users[0]['__categories']);
+                        <h5>
+                            <?php $serviceCategories=str_replace(",",", ",$users[0]['__categories']);
                                   echo $serviceCategories;
-                             ?>
-
+                            ?>
                         </h5>
 
                         <p><?php echo substr($users[0]['__aboutme'],0,130)."...";?></p>
@@ -82,7 +82,7 @@
                   </ul>
                    <?php }
                    else{
-                        echo ' <h4>At this time, we do not have anything available in the category you just selected. We apologize for any inconvenience. </h4>
+                        echo '<h4>At this time, we do not have anything available in the category you just selected. We apologize for any inconvenience. </h4>
                         <strong>Please check out other categories or contact us at Toll Free: 1660-01-13579, or email us at email@trilordmarket.com if you need any assistance.</strong>';
                     }?>
 

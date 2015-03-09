@@ -13,7 +13,7 @@
             <button><i class="fa fa-bars"></i></button>
 
             <ul class="primary-nav list-unstyled">
-                <li class="bg-color"><?php echo $this->html->link('HOME',array('controller' => 'pages', 'action' => 'display', 'home'));?></li>
+                <li><?php echo $this->html->link('HOME',array('controller' => 'pages', 'action' => 'display', 'home'));?></li>
                 <li>
                     <?php echo $this->html->link($menuItems['About']['title'],$menuItems['About']['url']);?>
                 </li>
