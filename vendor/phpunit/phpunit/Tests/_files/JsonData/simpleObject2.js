@@ -1,1 +1,5 @@
-{"Mascott":"Tux"}
+{
+    "Mascott"
+:
+    "Tux"
+};

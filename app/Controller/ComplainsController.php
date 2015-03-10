@@ -32,7 +32,8 @@ class ComplainsController extends AppController
     {
         $this->Complain->recursive = 0;
         $this->Paginator->settings = array('order' => array('complain_date' => ' desc'));
-        $this->set('complains_history', $this->Paginator->paginate(array('service_seeker_id' => $this->Auth->User('id'))));
+        $this->set('complains_history',
+            $this->Paginator->paginate(array('service_seeker_id' => $this->Auth->User('id'))));
     }
 
     public function admin_complain_history($id = null)
@@ -93,7 +94,8 @@ class ComplainsController extends AppController
                 $this->Session->setFlash('The complain has been saved.', 'default', array('class' => 'success'));
                 //return $this->redirect(array('controller' => 'users', 'action' => 'seeker_profile'));
             } else {
-                $this->Session->setFlash('The complain could not be saved. Please, try again.', 'default', array('class' => 'error-message'));
+                $this->Session->setFlash('The complain could not be saved. Please, try again.', 'default',
+                    array('class' => 'error-message'));
             }
         }
         $page_title = "ServiceRequests > Complaints";
@@ -116,9 +118,11 @@ class ComplainsController extends AppController
         if ($this->request->is(array('post', 'put'))) {
             if ($this->Complain->save($this->request->data)) {
                 $this->Session->setFlash('The complain has been updated.', 'default', array('class' => 'success'));
+
                 return $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash('The complain could not be updated. Please, try again.', 'default', array('class' => 'error-message'));
+                $this->Session->setFlash('The complain could not be updated. Please, try again.', 'default',
+                    array('class' => 'error-message'));
             }
         } else {
             $options = array('conditions' => array('Complain.' . $this->Complain->primaryKey => $id));
@@ -143,8 +147,10 @@ class ComplainsController extends AppController
         if ($this->Complain->delete()) {
             $this->Session->setFlash('The complain has been deleted.', 'default', array('class' => 'success'));
         } else {
-            $this->Session->setFlash('The complain could not be deleted. Please, try again.', 'default', array('class' => 'error-message'));
+            $this->Session->setFlash('The complain could not be deleted. Please, try again.', 'default',
+                array('class' => 'error-message'));
         }
+
         return $this->redirect(array('action' => 'index'));
     }
 
@@ -252,9 +258,11 @@ class ComplainsController extends AppController
             $this->Complain->create();
             if ($this->Complain->save($this->request->data)) {
                 $this->Session->setFlash('The complain has been saved.', 'default', array('class' => 'success'));
+
                 return $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash('The complain could not be saved. Please, try again.', 'default', array('class' => 'error-message'));
+                $this->Session->setFlash('The complain could not be saved. Please, try again.', 'default',
+                    array('class' => 'error-message'));
             }
         }
     }
@@ -274,9 +282,11 @@ class ComplainsController extends AppController
         if ($this->request->is(array('post', 'put'))) {
             if ($this->Complain->save($this->request->data)) {
                 $this->Session->setFlash('The complain has been updated.', 'default', array('class' => 'success'));
+
                 return $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash('The complain could not be updated. Please, try again.', 'default', array('class' => 'error-message'));
+                $this->Session->setFlash('The complain could not be updated. Please, try again.', 'default',
+                    array('class' => 'error-message'));
             }
         } else {
             $options = array('conditions' => array('Complain.' . $this->Complain->primaryKey => $id));
@@ -301,8 +311,10 @@ class ComplainsController extends AppController
         if ($this->Complain->delete()) {
             $this->Session->setFlash('The complain has been deleted.', 'default', array('class' => 'success'));
         } else {
-            $this->Session->setFlash('The complain could not be deleted. Please, try again.', 'default', array('class' => 'error-message'));
+            $this->Session->setFlash('The complain could not be deleted. Please, try again.', 'default',
+                array('class' => 'error-message'));
         }
+
         return $this->redirect(array('action' => 'index'));
     }
 }

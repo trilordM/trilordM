@@ -42,12 +42,13 @@ class ServiceRequestRelaysController extends AppController
         } else {
             $request_id = 'ServiceRequestRelay.seeker_provider_request_id !=0';
         }
-        $hideSearchBar = true;	
-	    $active_seeker_request = "active";
+        $hideSearchBar = true;
+        $active_seeker_request = "active";
         $page_title = "Response";
-        $this->set(compact('hideSearchBar', 'active_seeker_request','page_title'));
+        $this->set(compact('hideSearchBar', 'active_seeker_request', 'page_title'));
         $this->ServiceRequestRelay->recursive = 0;
-        $this->set('serviceRequestRelays',$this->Paginator->paginate(array('ServiceRequestRelay.service_seeker_id' => $id, $request_id)));
+        $this->set('serviceRequestRelays',
+            $this->Paginator->paginate(array('ServiceRequestRelay.service_seeker_id' => $id, $request_id)));
 
     }
 
@@ -77,10 +78,13 @@ class ServiceRequestRelaysController extends AppController
         if ($this->request->is('post')) {
             $this->ServiceRequestRelay->create();
             if ($this->ServiceRequestRelay->save($this->request->data)) {
-                $this->Session->setFlash('The service request relay has been saved.', 'default', array('class' => 'success'));
+                $this->Session->setFlash('The service request relay has been saved.', 'default',
+                    array('class' => 'success'));
+
                 return $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash('The service request relay could not be saved. Please, try again.', 'default', array('class' => 'error-message'));
+                $this->Session->setFlash('The service request relay could not be saved. Please, try again.', 'default',
+                    array('class' => 'error-message'));
             }
         }
         $seekerProviderRequests = $this->ServiceRequestRelay->SeekerProviderRequest->find('list');
@@ -101,10 +105,13 @@ class ServiceRequestRelaysController extends AppController
         }
         if ($this->request->is(array('post', 'put'))) {
             if ($this->ServiceRequestRelay->save($this->request->data)) {
-                $this->Session->setFlash('The service request relay has been saved.', 'default', array('class' => 'success'));
+                $this->Session->setFlash('The service request relay has been saved.', 'default',
+                    array('class' => 'success'));
+
                 return $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash('The service request relay could not be saved. Please, try again.', 'default', array('class' => 'error-message'));
+                $this->Session->setFlash('The service request relay could not be saved. Please, try again.', 'default',
+                    array('class' => 'error-message'));
             }
         } else {
             $options = array('conditions' => array('ServiceRequestRelay.' . $this->ServiceRequestRelay->primaryKey => $id));
@@ -129,10 +136,13 @@ class ServiceRequestRelaysController extends AppController
         }
         $this->request->onlyAllow('post', 'delete');
         if ($this->ServiceRequestRelay->delete()) {
-            $this->Session->setFlash('The service request relay has been deleted.', 'default', array('class' => 'success'));
+            $this->Session->setFlash('The service request relay has been deleted.', 'default',
+                array('class' => 'success'));
         } else {
-            $this->Session->setFlash('The service request relay could not be deleted. Please, try again.', 'default', array('class' => 'error-message'));
+            $this->Session->setFlash('The service request relay could not be deleted. Please, try again.', 'default',
+                array('class' => 'error-message'));
         }
+
         return $this->redirect(array('action' => 'index'));
     }
 
@@ -182,13 +192,17 @@ class ServiceRequestRelaysController extends AppController
         if($this->SeekerProviderRequest->field('status')=='1'){
                         $this->SeekerProviderRequest->saveField('status','0');
             }*/
-                $this->Session->setFlash('The service request relay has been saved.', 'default', array('class' => 'success'));
+                $this->Session->setFlash('The service request relay has been saved.', 'default',
+                    array('class' => 'success'));
+
                 return $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash('The service request relay could not be saved. Please, try again.', 'default', array('class' => 'error-message'));
+                $this->Session->setFlash('The service request relay could not be saved. Please, try again.', 'default',
+                    array('class' => 'error-message'));
             }
         }
-        $seekerProviderRequests = $this->ServiceRequestRelay->SeekerProviderRequest->find('all', array('conditions' => array('`SeekerProviderRequest`.`id`' => $id)));
+        $seekerProviderRequests = $this->ServiceRequestRelay->SeekerProviderRequest->find('all',
+            array('conditions' => array('`SeekerProviderRequest`.`id`' => $id)));
         //debug($seekerProviderRequests );
         //$this->loadModel('User');
         //$provider=$this->User->find('list',array('conditions'=>array('User.role'=>'Serviceprovider'),'fields'=>'User.name'));
@@ -217,10 +231,13 @@ class ServiceRequestRelaysController extends AppController
         }
         if ($this->request->is(array('post', 'put'))) {
             if ($this->ServiceRequestRelay->save($this->request->data)) {
-                $this->Session->setFlash('The service request relay has been updated.', 'default', array('class' => 'success'));
+                $this->Session->setFlash('The service request relay has been updated.', 'default',
+                    array('class' => 'success'));
+
                 return $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash('The service request relay could not be updated. Please, try again.', 'default', array('class' => 'error-message'));
+                $this->Session->setFlash('The service request relay could not be updated. Please, try again.',
+                    'default', array('class' => 'error-message'));
             }
         } else {
             $options = array('conditions' => array('ServiceRequestRelay.' . $this->ServiceRequestRelay->primaryKey => $id));
@@ -245,10 +262,13 @@ class ServiceRequestRelaysController extends AppController
         }
         $this->request->onlyAllow('post', 'delete');
         if ($this->ServiceRequestRelay->delete()) {
-            $this->Session->setFlash('The service request relay has been deleted.', 'default', array('class' => 'success'));
+            $this->Session->setFlash('The service request relay has been deleted.', 'default',
+                array('class' => 'success'));
         } else {
-            $this->Session->setFlash('The service request relay could not be deleted. Please, try again.', 'default', array('class' => 'error-message'));
+            $this->Session->setFlash('The service request relay could not be deleted. Please, try again.', 'default',
+                array('class' => 'error-message'));
         }
+
         return $this->redirect(array('action' => 'index'));
     }
 }

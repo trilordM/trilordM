@@ -7,7 +7,6 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
-
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -16,7 +15,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 App::uses('Component', 'Controller');
-class SparrowSMSComponent extends Component{
+
+class SparrowSMSComponent extends Component
+{
     /**
      * The username for the SparrowSMS API
      * @access public
@@ -51,7 +52,6 @@ class SparrowSMSComponent extends Component{
     const API_HTTP_URL = 'http://api.sparrowsms.com/call_in.php';
 
 
-
     /**
      * Send a message to SparrowSMS servers for the number provided
      * @param string $tel The telephone number.
@@ -62,7 +62,8 @@ class SparrowSMSComponent extends Component{
      * @see SmsComponent::api_pass
      * @see SmsComponent::api_from
      */
-    function sendSms($tel, $message) {
+    function sendSms($tel, $message)
+    {
         $postdata = http_build_query(
             array(
                 'client_id' => $this->user_id,
@@ -74,8 +75,9 @@ class SparrowSMSComponent extends Component{
             )
 
         );
-        $api_url = "http://api.sparrowsms.com/call_in.php?".$postdata;
+        $api_url = "http://api.sparrowsms.com/call_in.php?" . $postdata;
         $response = file_get_contents($api_url);
+
         return $response;
     }
 

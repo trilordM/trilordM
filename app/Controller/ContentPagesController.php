@@ -100,16 +100,19 @@ class ContentPagesController extends AppController
     {
         if ($this->request->is('post')) {
             $getMaxOrder = $this->ContentPage->find('first', array(
-                'fields' => array('MAX(ContentPage.content_order) as max_order')));
+                'fields' => array('MAX(ContentPage.content_order) as max_order')
+            ));
 
             $this->request->data['ContentPage']['content_order'] = $getMaxOrder[0]['max_order'] + 1;
             $this->request->data['ContentPage']['slug'] = $this->Useful->stringToSlug($this->request->data['ContentPage']['title']);
             $this->ContentPage->create();
             if ($this->ContentPage->save($this->request->data)) {
                 $this->Session->setFlash('The content page has been saved.', 'default', array('class' => 'success'));
+
                 return $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash('The content page could not be saved. Please, try again.', 'default', array('class' => 'error-message'));
+                $this->Session->setFlash('The content page could not be saved. Please, try again.', 'default',
+                    array('class' => 'error-message'));
             }
         }
     }
@@ -130,9 +133,11 @@ class ContentPagesController extends AppController
             $this->request->data['ContentPage']['slug'] = $this->Useful->stringToSlug($this->request->data['ContentPage']['title']);
             if ($this->ContentPage->save($this->request->data)) {
                 $this->Session->setFlash('The content page has been saved.', 'default', array('class' => 'success'));
+
                 return $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash('The content page could not be saved. Please, try again.', 'default', array('class' => 'error-message'));
+                $this->Session->setFlash('The content page could not be saved. Please, try again.', 'default',
+                    array('class' => 'error-message'));
             }
         } else {
             $options = array('conditions' => array('ContentPage.' . $this->ContentPage->primaryKey => $id));
@@ -157,8 +162,10 @@ class ContentPagesController extends AppController
         if ($this->ContentPage->delete()) {
             $this->Session->setFlash('The content page has been deleted.', 'default', array('class' => 'success'));
         } else {
-            $this->Session->setFlash('The content page could not be deleted. Please, try again.', 'default', array('class' => 'error-message'));
+            $this->Session->setFlash('The content page could not be deleted. Please, try again.', 'default',
+                array('class' => 'error-message'));
         }
+
         return $this->redirect(array('action' => 'index'));
     }
 }

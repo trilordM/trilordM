@@ -54,10 +54,13 @@ class ComplainArchivesController extends AppController
         if ($this->request->is('post')) {
             $this->ComplainArchive->create();
             if ($this->ComplainArchive->save($this->request->data)) {
-                $this->Session->setFlash('The complain archive has been saved.', 'default', array('class' => 'success'));
+                $this->Session->setFlash('The complain archive has been saved.', 'default',
+                    array('class' => 'success'));
+
                 return $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash('The complain archive could not be saved. Please, try again.', 'default', array('class' => 'error-message'));
+                $this->Session->setFlash('The complain archive could not be saved. Please, try again.', 'default',
+                    array('class' => 'error-message'));
             }
         }
         $complains = $this->ComplainArchive->Complain->find('list');
@@ -80,10 +83,13 @@ class ComplainArchivesController extends AppController
         }
         if ($this->request->is(array('post', 'put'))) {
             if ($this->ComplainArchive->save($this->request->data)) {
-                $this->Session->setFlash('The complain archive has been updated.', 'default', array('class' => 'success'));
+                $this->Session->setFlash('The complain archive has been updated.', 'default',
+                    array('class' => 'success'));
+
                 return $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash('The complain archive could not be updated. Please, try again.', 'default', array('class' => 'error-message'));
+                $this->Session->setFlash('The complain archive could not be updated. Please, try again.', 'default',
+                    array('class' => 'error-message'));
             }
         } else {
             $options = array('conditions' => array('ComplainArchive.' . $this->ComplainArchive->primaryKey => $id));
@@ -112,8 +118,10 @@ class ComplainArchivesController extends AppController
         if ($this->ComplainArchive->delete()) {
             $this->Session->setFlash('The complain archive has been deleted.', 'default', array('class' => 'success'));
         } else {
-            $this->Session->setFlash('The complain archive could not be deleted. Please, try again.', 'default', array('class' => 'error-message'));
+            $this->Session->setFlash('The complain archive could not be deleted. Please, try again.', 'default',
+                array('class' => 'error-message'));
         }
+
         return $this->redirect(array('action' => 'index'));
     }
 
@@ -154,10 +162,13 @@ class ComplainArchivesController extends AppController
         if ($this->request->is('post')) {
             $this->ComplainArchive->create();
             if ($this->ComplainArchive->save($this->request->data)) {
-                $this->Session->setFlash('The complain archive has been saved.', 'default', array('class' => 'success'));
+                $this->Session->setFlash('The complain archive has been saved.', 'default',
+                    array('class' => 'success'));
+
                 return $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash('The complain archive could not be saved. Please, try again.', 'default', array('class' => 'error-message'));
+                $this->Session->setFlash('The complain archive could not be saved. Please, try again.', 'default',
+                    array('class' => 'error-message'));
             }
         }
         $complains = $this->ComplainArchive->Complain->find('list');
@@ -180,10 +191,13 @@ class ComplainArchivesController extends AppController
         }
         if ($this->request->is(array('post', 'put'))) {
             if ($this->ComplainArchive->save($this->request->data)) {
-                $this->Session->setFlash('The complain archive has been updated.', 'default', array('class' => 'success'));
+                $this->Session->setFlash('The complain archive has been updated.', 'default',
+                    array('class' => 'success'));
+
                 return $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash('The complain archive could not be updated. Please, try again.', 'default', array('class' => 'error-message'));
+                $this->Session->setFlash('The complain archive could not be updated. Please, try again.', 'default',
+                    array('class' => 'error-message'));
             }
         } else {
             $options = array('conditions' => array('ComplainArchive.' . $this->ComplainArchive->primaryKey => $id));
@@ -213,8 +227,10 @@ class ComplainArchivesController extends AppController
         if ($this->ComplainArchive->delete()) {
             $this->Session->setFlash('The complain archive has been deleted.', 'default', array('class' => 'success'));
         } else {
-            $this->Session->setFlash('The complain archive could not be deleted. Please, try again.', 'default', array('class' => 'error-message'));
+            $this->Session->setFlash('The complain archive could not be deleted. Please, try again.', 'default',
+                array('class' => 'error-message'));
         }
+
         return $this->redirect(array('action' => 'index'));
     }
 }

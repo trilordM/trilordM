@@ -565,7 +565,7 @@
           if($(input).data("settings").tokenLimit !== null && token_count >= $(input).data("settings").tokenLimit) {
               input_box.hide();
               hide_dropdown();
-              return;
+
           }
       }
 
@@ -674,7 +674,7 @@
           if($(input).data("settings").tokenLimit == null || token_count < $(input).data("settings").tokenLimit) {
               insert_token(item);
               // Remove the placeholder so it's not seen after you've added a token
-              input_box.attr("placeholder", null)
+              input_box.attr("placeholder", null);
               checkTokenLimit();
           }
 

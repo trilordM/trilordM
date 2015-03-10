@@ -18,6 +18,7 @@ class UsefulComponent extends Component
             $pass = $pass . $tmp;
             $i++;
         }
+
         return $pass;
     }
 
@@ -28,6 +29,7 @@ class UsefulComponent extends Component
         $str = Inflector::slug($str);
         // to lowercase
         $str = ucfirst(strtolower($str));
+
         return $str;
     }
 
@@ -35,6 +37,7 @@ class UsefulComponent extends Component
     {
         $category = ClassRegistry::init('ServiceCategories');
         $serviceCategories = $category->query("SELECT title FROM `service_categories` inner join provider_service_categories on provider_service_categories.service_categories_id= service_categories.id where provider_service_categories.user_id={$userId}");
+
         //debug($serviceCategories);
         return $serviceCategories;
     }
@@ -60,6 +63,7 @@ class UsefulComponent extends Component
             $rate_bg = 0;
         }
         $ratingArray = array('rating' => $rate_bg, 'people' => $rate_times, 'rating_point' => round($rate_value, 1));
+
         return $ratingArray;
     }
 
@@ -139,6 +143,7 @@ class UsefulComponent extends Component
             'TotalDeposit' => $totalDeposits[0][0]['Deposit'],
             'UsedBalance' => $usedBalance
         );
+
         return $remaining_balance;
 
     }
@@ -248,6 +253,7 @@ class UsefulComponent extends Component
             $data[$i]['name'] = $address['users']['temporary_address'];
             $i++;
         endforeach;
+
         //debug($data);
         return $data;
     }
@@ -319,7 +325,9 @@ class UsefulComponent extends Component
 
         return $data;
     }
-    public function checkMobileNumber($seeker_number){
+
+    public function checkMobileNumber($seeker_number)
+    {
         $seeker_mob_num = '';
         if (is_numeric($seeker_number)) {
             $number_digit = strlen($seeker_number);
@@ -336,9 +344,12 @@ class UsefulComponent extends Component
                 }
             }
         }
+
         return $seeker_mob_num;
     }
-    public function sendEmail($emailTo, $subject, $template, $vars = array(), $config = "default", $format = "html"){
+
+    public function sendEmail($emailTo, $subject, $template, $vars = array(), $config = "default", $format = "html")
+    {
         $this->autoRender = false;
 
         $Email = new CakeEmail();

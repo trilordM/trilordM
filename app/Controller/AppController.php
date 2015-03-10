@@ -92,6 +92,7 @@ class AppController extends Controller
         'users|logout',
         'pages|invite_friend'
     );
+
     public function isAuthorized($user)
     {
         //provider

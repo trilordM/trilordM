@@ -23,8 +23,7 @@ $(function() {
         handle: ".handle",
         forcePlaceholderSize: true,
         zIndex: 999999
-    }).disableSelection();;
-
+    }).disableSelection();
     //bootstrap WYSIHTML5 - text editor
     $(".textarea").wysihtml5();
 

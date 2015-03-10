@@ -15,9 +15,8 @@
 
   function Draggable(){
   	this._init.apply( this, arguments );
-  };
-
-	Draggable.prototype.oninit = function(){
+  }
+    Draggable.prototype.oninit = function(){
 	  
 	};
 	

@@ -1299,11 +1299,13 @@ left join districts D on D.id=P.district_id
         if ($this->request->is('post')) {
             $success = $this->UserRepository->create($this->request->data);
 
-            if($success) {
+            if ($success) {
                 $this->Session->setFlash('Your credentials have been saved, all the information you have provided will be kept confidential and will not be disclosed anywhere. You will be sent a validation email to confirm your account.Please check spam folder incase there is no email in inbox. Please Verify your e-mail.',
                     'default', array('class' => 'success'));
-            }else
-                $this->Session->setFlash('The user could not be saved. Please, try again.', 'default',array('class' => 'error-message'));
+            } else {
+                $this->Session->setFlash('The user could not be saved. Please, try again.', 'default',
+                    array('class' => 'error-message'));
+            }
 
         }
 
@@ -1314,7 +1316,7 @@ left join districts D on D.id=P.district_id
 
     public function confirm_message()
     {
-        $email = base64_decode ($this->params['url']['email']);
+        $email = base64_decode($this->params['url']['email']);
         $code = $this->params['url']['code'];
 
         //$condition=array('email'=>$email,'registration_code'=>$code);

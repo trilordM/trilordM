@@ -20,7 +20,7 @@
 	$.fn.addDependClass = function(className, delimiter){
 		var options = {
 		  delimiter: delimiter ? delimiter : '-'
-		}
+		};
 		return this.each(function(){
 		  var baseClass = $.baseClass(this);
 		  if(baseClass)
@@ -31,7 +31,7 @@
 	$.fn.removeDependClass = function(className, delimiter){
 		var options = {
 		  delimiter: delimiter ? delimiter : '-'
-		}
+		};
 		return this.each(function(){
 		  var baseClass = $.baseClass(this);
 		  if(baseClass)
@@ -42,7 +42,7 @@
 	$.fn.toggleDependClass = function(className, delimiter){
 		var options = {
 		  delimiter: delimiter ? delimiter : '-'
-		}
+		};
 		return this.each(function(){
 		  var baseClass = $.baseClass(this);
 		  if(baseClass)

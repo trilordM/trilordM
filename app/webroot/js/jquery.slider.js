@@ -50,13 +50,11 @@
 	  
 	  function isDef( val ){
 	    return val !== undefined;
-	  };
-
-	  function isDefAndNotNull( val ){
+      }
+        function isDefAndNotNull( val ){
       return val != null;
-	  };
-	  
-		this.each(function(){
+      }
+        this.each(function(){
 		  var self = $.slider( this, action );
 		  
 		  // do actions
@@ -121,17 +119,15 @@
   		      returnValue = "";
   		      for (var i=0; i < value.length; i++) {
   		        returnValue += (i > 0 ? ";" : "") + self.nice( value[i] );
-  		      };
-  		      
-  		      break;
+              }
+                break;
   		      
   		    case "skin":
 		        self.setSkin( args[1] );
 
   		      break;
-		    };
-		  
-		  }
+            }
+          }
 		  
 		  // return actual object
 		  else if( !action && !opt_value ){
@@ -193,9 +189,8 @@
 
   function jSlider(){
   	return this.init.apply( this, arguments );
-  };
-
-  jSlider.prototype.init = function( node, settings ){
+  }
+    jSlider.prototype.init = function( node, settings ){
     this.settings = $.extend(true, {}, OPTIONS.settings, settings ? settings : {});
     
     // obj.sliderHandler = this;
@@ -287,7 +282,7 @@
         $this.o.pointers[i] = new jSliderPointer( this, i, $this );
 
         var prev = $this.settings.value.split(";")[i-1];
-        if( prev && new Number(value) < new Number(prev) ) value = prev;
+        if( prev && Number(value) < Number(prev) ) value = prev;
 
         value = value < $this.settings.from ? $this.settings.from : value;
         value = value > $this.settings.to ? $this.settings.to : value;
@@ -335,8 +330,8 @@
       var prc = Math.round((100/(s.length-1))*10)/10;
       for( var i=0; i < s.length; i++ ){
         str += '<span style="left: ' + i*prc + '%">' + ( s[i] != '|' ? '<ins>' + s[i] + '</ins>' : '' ) + '</span>';
-      };
-      return str;
+      }
+        return str;
     } else return "";
 
     return "";
@@ -516,16 +511,14 @@
       	    limits[1] = false;
       	}
 
-      };
-
-      for( var i=0; i < limits.length; i++ ){
+      }
+          for( var i=0; i < limits.length; i++ ){
         if( limits[i] )
           this.o.limits[i].fadeIn("fast");
         else
           this.o.limits[i].fadeOut("fast");
-      };
-
-	  }
+      }
+      }
   };
   
   jSlider.prototype.setValue = function(){
@@ -568,8 +561,8 @@
   	    if( h[i] ) var v = h[i].split("/");
   	    else       var v = [100, this.settings.to];
   	    
-  	    v[0] = new Number(v[0]);
-  	    v[1] = new Number(v[1]);
+  	    v[0] = Number(v[0]);
+  	    v[1] = Number(v[1]);
   	      
   	    if( prc >= _start && prc <= v[0] ) {
   	      var value = _from + ( (prc-_start) * (v[1]-_from) ) / (v[0]-_start);
@@ -577,9 +570,8 @@
 
   	    _start = v[0];
   	    _from = v[1];
-  	  };
-
-	  } else {
+      }
+      } else {
       var value = this.settings.from + ( prc * this.settings.interval ) / 100;
 	  }
 
@@ -596,16 +588,15 @@
   	  for (var i=0; i <= h.length; i++) {
   	    if(h[i]) var v = h[i].split("/");
   	    else     var v = [100, this.settings.to];
-  	    v[0] = new Number(v[0]); v[1] = new Number(v[1]);
+  	    v[0] = Number(v[0]); v[1] = Number(v[1]);
   	      
   	    if(value >= _from && value <= v[1]){
   	      var prc = pointer.limits(_start + (value-_from)*(v[0]-_start)/(v[1]-_from));
   	    }
 
   	    _start = v[0]; _from = v[1];
-  	  };
-
-	  } else {
+      }
+      } else {
   	  var prc = pointer.limits((value-this.settings.from)*100/this.settings.interval);
 	  }
 
@@ -620,14 +611,13 @@
 	};
 	
 	jSlider.prototype.nice = function( value ){
-		value = value.toString().replace(/,/gi, ".").replace(/ /gi, "");;
-
-		if( $.formatNumber ){
-		  return $.formatNumber( new Number(value), this.settings.format || {} ).replace( /-/gi, "&minus;" );
+        value = value.toString().replace(/,/gi, ".").replace(/ /gi, "");
+        if( $.formatNumber ){
+		  return $.formatNumber( Number(value), this.settings.format || {} ).replace( /-/gi, "&minus;" );
 		}
 		  
 		else {
-		  return new Number(value);
+		  return Number(value);
 		}
 	};
 

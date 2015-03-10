@@ -6,7 +6,9 @@
  * Time: 3:42 PM
  */
 App::uses('Component', 'Controller');
-class UserEmailComponent extends Component{
+
+class UserEmailComponent extends Component
+{
     /**
      * @param $emailTo
      * @param $subject
@@ -16,7 +18,8 @@ class UserEmailComponent extends Component{
      * @param string $format
      */
 
-    public function send($emailTo, $subject, $template, $vars = array(), $config = "default", $format = "html"){
+    public function send($emailTo, $subject, $template, $vars = array(), $config = "default", $format = "html")
+    {
 
         $Email = new CakeEmail(array('log' => true));
         $Email->config($config);

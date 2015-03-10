@@ -109,15 +109,14 @@
 	var nfLocalesLikeCH = [ 'ch' ];
 	
 	var nfLocaleFormatting = [ [".", ","], [",", "."], [",", " "], [".", "'"] ]; 
-	var nfAllLocales = [ nfLocalesLikeUS, nfLocalesLikeDE, nfLocalesLikeFR, nfLocalesLikeCH ]
+	var nfAllLocales = [ nfLocalesLikeUS, nfLocalesLikeDE, nfLocalesLikeFR, nfLocalesLikeCH ];
 
 	function FormatData(dec, group, neg) {
 		this.dec = dec;
 		this.group = group;
 		this.neg = neg;
-	};
-
-	function init() {
+    }
+    function init() {
 		// write the arrays into the hashtable
 		for (var localeGroupIdx = 0; localeGroupIdx < nfAllLocales.length; localeGroupIdx++) {
 			localeGroup = nfAllLocales[localeGroupIdx];
@@ -125,9 +124,8 @@
 				nfLocales.put(localeGroup[i], localeGroupIdx);
 			}
 		}
-	};
-
-	function formatCodes(locale, isFullLocale) {
+    }
+    function formatCodes(locale, isFullLocale) {
 		if (nfLocales.size() == 0)
 			init();
 
@@ -155,10 +153,8 @@
 			}
 		 }
 		 return new FormatData(dec, group, neg);
-    };
-	
-	
-	/*	Formatting Methods	*/
+    }
+    /*	Formatting Methods	*/
 	
 	
 	/**
@@ -180,9 +176,9 @@
 			// get text
 			var text;
 			if (jQuery(this).is(":input"))
-				text = new String(jQuery(this).val());
+				text = String(jQuery(this).val());
 			else
-				text = new String(jQuery(this).text());
+				text = String(jQuery(this).text());
 
 			// format
 			var returnString = jQuery.formatNumber(text, options);
@@ -230,7 +226,7 @@
 			else 
 				if (i == 0 && options.format.charAt(i) == '-') {
 					negativeInFront = true;
-					continue;
+
 				}
 				else 
 					break;
@@ -250,7 +246,7 @@
 		//while (numberString.indexOf(group) > -1) 
 		//	numberString = numberString.replace(group, '');
 		//var number = new Number(numberString.replace(dec, ".").replace(neg, "-"));
-		var number = new Number(numberString);
+		var number = Number(numberString);
 		
 		return jQuery._formatNumber(number, options, suffix, prefix, negativeInFront);
 	};
@@ -289,26 +285,26 @@
 			
 			// round or truncate number as needed
 			if (options.round == true)
-				number = new Number(number.toFixed(decimalFormat.length));
+				number = Number(number.toFixed(decimalFormat.length));
 			else {
 				var numStr = number.toString();
 				numStr = numStr.substring(0, numStr.lastIndexOf('.') + decimalFormat.length + 1);
-				number = new Number(numStr);
+				number = Number(numStr);
 			}
 			
 			var decimalValue = number % 1;
-			var decimalString = new String(decimalValue.toFixed(decimalFormat.length));
+			var decimalString = String(decimalValue.toFixed(decimalFormat.length));
 			decimalString = decimalString.substring(decimalString.lastIndexOf(".") + 1);
 			
 			for (var i = 0; i < decimalFormat.length; i++) {
 				if (decimalFormat.charAt(i) == '#' && decimalString.charAt(i) != '0') {
                 	decimalPortion += decimalString.charAt(i);
-					continue;
+
 				} else if (decimalFormat.charAt(i) == '#' && decimalString.charAt(i) == '0') {
 					var notParsed = decimalString.substring(i);
 					if (notParsed.match('[1-9]')) {
 						decimalPortion += decimalString.charAt(i);
-						continue;
+
 					} else
 						break;
 				} else if (decimalFormat.charAt(i) == "0")
@@ -331,7 +327,7 @@
 		var onePortion = "";
 		if (!(ones == 0 && onesFormat.substr(onesFormat.length - 1) == '#') || forcedToZero) {
 			// find how many digits are in the group
-			var oneText = new String(Math.abs(ones));
+			var oneText = String(Math.abs(ones));
 			var groupLength = 9999;
 			if (onesFormat.lastIndexOf(",") != -1)
 				groupLength = onesFormat.length - onesFormat.lastIndexOf(",") - 1;
@@ -403,9 +399,9 @@
 		// get text
 		var text;
 		if (jQuery(this).is(":input"))
-			text = new String(jQuery(this).val());
+			text = String(jQuery(this).val());
 		else
-			text = new String(jQuery(this).text());
+			text = String(jQuery(this).text());
 	
 		// parse text
 		var number = jQuery.parseNumber(text, options);
@@ -450,7 +446,7 @@
 			if (valid.indexOf(numberString.charAt(i))>-1)
 				validText = validText + numberString.charAt(i);
 		}
-		var number = new Number(validText);
+		var number = Number(validText);
 		if (hasPercent) {
 			number = number / 100;
 			var decimalPos = validText.indexOf('.');

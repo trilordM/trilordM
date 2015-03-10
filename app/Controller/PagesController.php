@@ -132,7 +132,12 @@ class PagesController extends AppController
         if ($searchjob > 0) {
             $job = $this->Page->query("select id,title from service_categories where id='$searchjob'");
             //debug($job);
-            $job = array(array('id' => $job[0]['service_categories']['id'], 'name' => $job[0]['service_categories']['title']));
+            $job = array(
+                array(
+                    'id' => $job[0]['service_categories']['id'],
+                    'name' => $job[0]['service_categories']['title']
+                )
+            );
             //debug($job);die;
         } else {
             $job = "";
@@ -140,12 +145,14 @@ class PagesController extends AppController
 
 
         $this->loadModel('Testimonial');
-        $testimonial = $this->Testimonial->find('all', array('conditions' => array('Testimonial.is_active' => '1'), 'order' => 'RAND()', 'limit' => 5));
+        $testimonial = $this->Testimonial->find('all',
+            array('conditions' => array('Testimonial.is_active' => '1'), 'order' => 'RAND()', 'limit' => 5));
         $this->set('testimonials', $testimonial);
         //debug($testimonial);die;
 
         $frontPage = true;
-        $this->set(compact('frontPage', 'service_packages', 'searchplace', 'searchjob', 'salary', 'user_stats', 'getSearchplace', 'getSearchjob', 'getPlace', 'placeDistrict', 'job'));
+        $this->set(compact('frontPage', 'service_packages', 'searchplace', 'searchjob', 'salary', 'user_stats',
+            'getSearchplace', 'getSearchjob', 'getPlace', 'placeDistrict', 'job'));
         try {
             $this->render(implode('/', $path));
         } catch (MissingViewException $e) {

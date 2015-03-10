@@ -38,7 +38,7 @@ jQuery(document).ready(function($) {
 		  // Custom Navigation Events
 		  $(".slider-next").click(function(){
 			owl.trigger('owl.next');
-		  })
+		  });
 		  $(".slider-prev").click(function(){
 			owl.trigger('owl.prev');
 		  })
@@ -57,7 +57,7 @@ jQuery(document).ready(function($) {
       // Custom Navigation Events
       $(".next").click(function(){
         owl.trigger('owl.next');
-      })
+      });
       $(".prev").click(function(){
         owl.trigger('owl.prev');
       })
@@ -75,7 +75,7 @@ $(function() {
       // Custom Navigation Events
       $(".next").click(function(){
         owl.trigger('owl.next');
-      })
+      });
       $(".prev").click(function(){
         owl.trigger('owl.prev');
       })
@@ -128,7 +128,7 @@ $(function() {
 			.find(".owl-item")
 			.removeClass("synced")
 			.eq(current)
-			.addClass("synced")
+			.addClass("synced");
 			if($("#sync2").data("owlCarousel") !== undefined){
 			center(current)
 			}
@@ -189,7 +189,7 @@ $(function() {
       // Custom Navigation Events
       $(".next").click(function(){
         owl.trigger('owl.next');
-      })
+      });
       $(".prev").click(function(){
         owl.trigger('owl.prev');
       })

@@ -1329,6 +1329,7 @@ left join districts D on D.id=P.district_id
                 );
 
                 $this->Useful->sendEmail($email, "Account Activation with " . COMPANY_NAME, 'signup', $emailVars);
+
                 return $this->redirect(array('controller' => 'users', 'action' => 'login'));
             } else {
 
