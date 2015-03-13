@@ -217,6 +217,15 @@ class PagesController extends AppController
         $this->Page->recursive = 0;
         $user = $this->Paginator->paginate('Page', $conditions);
 
+        for ($i = 0; $i < sizeof($user); $i++) {
+
+            $providerId = $user[$i][0]['__id'];
+            $ratingCount = $this->Useful->getProviderRating($providerId);
+            $rating = $ratingCount['rating'];
+            array_push($user[$i][0], $rating);
+
+
+        }
 
         $getSearchjob = $this->Useful->getSearchjobSuggestionList();
         $getPlace = $this->Useful->getPlaceSuggestionList();

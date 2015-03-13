@@ -26,25 +26,22 @@
 
                       <div class="single-product">
                         <figure>
-                          <?php if(file_exists(WWW_ROOT.'providers_photo/thumbs/'.$users[0]['__profilephoto'])&&!empty($users[0]['__profilephoto'])){
-                          															echo $this->Html->link($this->Html->image('/providers_photo/thumbs/'.$users[0]['__profilephoto'],array('class'=>'img-responsive img-thumbnail','alt'=>'dummy-joblist')),array('controller' => 'users', 'action' => 'provider',$users[0]['__id']),array('escape'=>false));
+                            <?php if(file_exists(WWW_ROOT.'providers_photo/thumbs/'.$users[0]['__profilephoto'])&&!empty($users[0]['__profilephoto'])){
+                                                                                    echo $this->Html->link($this->Html->image('/providers_photo/thumbs/'.$users[0]['__profilephoto'],array('class'=>'img-responsive img-thumbnail','alt'=>'dummy-joblist')),array('controller' => 'users', 'action' => 'provider',$users[0]['__id']),array('escape'=>false));
 
-                          												}else{
-                          														echo $this->Html->link($this->Html->image('avatar.gif',array('class'=>'img-responsive img-thumbnail','alt'=>'dummy-joblist')),array('controller' => 'users', 'action' => 'provider',$users[0]['__id']),array('escape'=>false));
-                          												}?>
-
-                          <div class="rating">
-
-                            <ul class="list-inline">
-                              <li><a href="#"><i class="fa fa-star"></i></a></li>
-                              <li><a href="#"><i class="fa fa-star"></i></a></li>
-                              <li><a href="#"><i class="fa fa-star"></i></a></li>
-                              <li><a href="#"><i class="fa fa-star-half-o"></i></a></li>
-                              <li><a href="#"><i class="fa fa-star-o"></i></a></li>
-                            </ul>
-
-                          </div> <!-- end .rating -->
+                            }else{
+                                    echo $this->Html->link($this->Html->image('avatar.gif',array('class'=>'img-responsive img-thumbnail','alt'=>'dummy-joblist')),array('controller' => 'users', 'action' => 'provider',$users[0]['__id']),array('escape'=>false));
+                            }?>
                         </figure>
+
+                        <div class="box-result-cnt">
+                            <hr>
+                            <div class="rate-result-cnt">
+                                <div class="rate-bg" style="width:<?php echo $users[0]['0']; ?>%"></div>
+                                <div class="rate-stars"></div>
+                            </div>
+                            <hr>
+                        </div>
 
                         <h4><a href="#"><?php echo $this->Html->link($users[0]['__name'],array('controller' => 'users', 'action' => 'provider',$users[0]['__id']));?></a></h4>
 

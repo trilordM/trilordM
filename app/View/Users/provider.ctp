@@ -9,19 +9,16 @@
                                 echo $this->Html->image('avatar.gif',array('class'=>'img-responsive job-detail-logo img-rounded','alt'=>'No Image')) ;
                             }
                             ?>
-
-                            <div class="rating">
-
-                                <ul class="list-inline">
-                                    <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-star-half-o"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-star-o"></i></a></li>
-                                </ul>
-
-                            </div> <!-- end .rating -->
                         </figure>
+                        <div class="box-result-cnt">
+                            <hr>
+                            <div class="rate-result-cnt">
+                                <div class="rate-bg" style="width:<?php echo $ratingCount['rating']; ?>%"></div>
+                                <div class="rate-stars"></div>
+                            </div>
+                            <hr>
+                        </div>
+
                         <h4><?php echo h($user['User']['name']); ?>'s Profile</h4>
 
                         <h5>

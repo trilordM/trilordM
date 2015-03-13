@@ -1563,22 +1563,17 @@ left join districts D on D.id=P.district_id
         //rating
         if ($this->request->is('ajax')) {
             $this->autoRender = false;
-            $this->layout = false;
+            /*$this->layout = false;
             $providerId = addslashes($this->request->data['provider_id']);
             $request_id = addslashes($this->request->data['request_id']);
             $seekerId = $this->Auth->user('id');
             $rate = addslashes($this->request->data['rate']);
-            //$countSeekerRating = $this->User->query("select count(user_id) UserIds from ratings where user_id='".$providerId."' and seeker_id='".$seekerId."'");
-            /*
-            if($countSeekerRating[0][0]['UserIds']>0){
-                $this->User->query("update ratings set rating='".$rate."' where user_id='".$providerId."' and seeker_id='".$seekerId."'");
-            }else{
-                $this->User->query("insert into ratings (user_id,seeker_id,rating) values('".$providerId."','".$seekerId."','".$rate."')");
-            }*/
+
             $this->User->query("insert into ratings (user_id,seeker_id,request_id,rating) values('" . $providerId . "','" . $seekerId . "','" . $request_id . "','" . $rate . "')");
+    */      $providerId = addslashes($this->request->data['provider_id']);
             $ratingCount = $this->Useful->getProviderRating($providerId);
-            echo ($rate / 5) * 100;
-            //echo json_encode($ratingCount);
+
+            echo json_encode($ratingCount);
 
         }
     }
