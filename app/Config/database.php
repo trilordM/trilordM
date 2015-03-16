@@ -59,27 +59,61 @@
  * For Postgres : http://www.postgresql.org/docs/9.2/static/sql-set.html
  * For Sql Server : http://msdn.microsoft.com/en-us/library/ms190356.aspx
  */
-class DATABASE_CONFIG {
+class DATABASE_CONFIG
+{
 
-	public $default = array(
-		'datasource' => 'Database/Mysql',
-		'persistent' => false,
-		'host' => 'localhost',
-		'login' => 'root',
-		'password' => 'root123',
-		'database' => 'trilord_live',
-		'prefix' => '',
-		//'encoding' => 'utf8',
-	);
-	
-	public $test = array(
-		'datasource' => 'Database/Mysql',
-		'persistent' => false,
-		'host' => 'localhost',
-		'login' => 'user',
-		'password' => 'password',
-		'database' => 'test_database_name',
-		'prefix' => '',
-		//'encoding' => 'utf8',
-	);
+    public $default = null;
+
+    public $develop = array(
+        'datasource' => 'Database/Mysql',
+        'persistent' => false,
+        'host' => 'localhost',
+        'login' => 'root',
+        'password' => 'root123',
+        'database' => 'trilord_live',
+        'prefix' => '',
+        //'encoding' => 'utf8',
+    );
+
+    public $live = array(
+        'datasource' => 'Database/Mysql',
+        'persistent' => false,
+        'host' => 'localhost',
+        'login' => 'trilord_market',
+        'password' => 'trilord^^)%#',
+        'database' => 'trilord_live',
+        'prefix' => '',
+        //'encoding' => 'utf8',
+    );
+
+    public $test = array(
+        'datasource' => 'Database/Mysql',
+        'persistent' => false,
+        'host' => 'localhost',
+        'login' => 'trilord_test',
+        'password' => 't#5q7L@sT6VU',
+        'database' => 'trilord_beta',
+        'prefix' => '',
+        //'encoding' => 'utf8',
+    );
+
+
+    // the construct function is called automatically, and chooses prod or dev.
+    function __construct()
+    {
+        //check to see if server name is set
+        if (isset($_SERVER['SERVER_NAME'])) {
+            switch ($_SERVER['SERVER_NAME']) {
+                case 'localhost':
+                    $this->default = $this->develop;
+                    break;
+                case 'trilordmarket.com':
+                    $this->default = $this->live;
+                    break;
+            }
+        } else // local db
+        {
+            $this->default = $this->develop;
+        }
+    }
 }

@@ -27,16 +27,15 @@ App::uses('Controller', 'Controller');
  * Add your application-wide methods in the class below, your controllers
  * will inherit them.
  *
- * @package        app.Controller
- * @link        http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
+ * @package		app.Controller
+ * @link		http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
-class AppController extends Controller
-{
+class AppController extends Controller {
 
     public $components = array(
         'Session',
         'Auth' => array(
-            'loginRedirect' => array(
+            'loginRedirect' =>array(
                 'controller' => 'pages',
                 'action' => 'display',
                 'home'
@@ -53,12 +52,10 @@ class AppController extends Controller
             ),
             'authorize' => array('Controller') // Added this line
         ),
-        'Useful',
-        'DebugKit.Toolbar'
+        'Useful'
     );
 
-    public $ServiceProvider = array(
-        'users|provider_profile_page',
+    public $ServiceProvider = array('users|provider_profile_page',
         'users|logout',
         'pages|invite_friend'
 
@@ -84,6 +81,7 @@ class AppController extends Controller
         'seeker_provider_requests|response_enquire',
         'ServiceRequestRelays|seeker_request',
         'service_package_requests|add',
+        //'pages|search_marketplace',
         'payments|paypal',
         'payments|bank_deposit',
         'payments|esewa_deposit',
@@ -93,23 +91,17 @@ class AppController extends Controller
         'pages|invite_friend'
     );
 
-    public function isAuthorized($user)
-    {
+    public function isAuthorized($user) {
         //provider
-        if (isset($user['role']) && $user['role'] == 'ServiceProvider') :
-            if (in_array($this->params['controller'] . "|" . $this->params['action'], $this->ServiceProvider)) {
-                return true;
-            } else {
-                return false;
-            }
+
+        if(isset($user['role']) && $user['role'] == 'ServiceProvider') :
+            if (in_array($this->params['controller']."|".$this->params['action'],$this->ServiceProvider))
+            {return true;}	else {return false;}
         endif;
 
-        if (isset($user['role']) && $user['role'] == 'ServiceSeeker') :
-            if (in_array($this->params['controller'] . "|" . $this->params['action'], $this->ServiceSeeker)) {
-                return true;
-            } else {
-                return false;
-            }
+        if(isset($user['role']) && $user['role'] == 'ServiceSeeker') :
+            if (in_array($this->params['controller']."|".$this->params['action'],$this->ServiceSeeker))
+            {return true;}	else {return false;}
         endif;
 
         // Admin can access every action
@@ -121,30 +113,28 @@ class AppController extends Controller
         return false;
     }
 
-    public function beforeFilter()
-    {
+    public function beforeFilter() {
 
-        $this->Auth->allow('index', 'view', 'search_marketplace', 'provider', 'contact', 'provider_register', 'career','facebook_login');
+        $this->Auth->allow('index', 'view','search_marketplace','provider','contact','provider_register','career','facebook_login');
         parent::beforeFilter();
 
         $this->layout = 'default';
-        if (isset($this->params['layout'])) {
+        if (isset($this->params['layout']))
             $this->layout = $this->params['layout'];
-        }
 
-        if (isset($this->request->params['admin']) && $this->request->params['admin']) {
+        if(isset($this->request->params['admin']) && $this->request->params['admin']) {
             $this->layout = 'admin';
-            if ($this->Auth->user('role') == 'ServiceProvider' || $this->Auth->user('role') == 'ServiceSeeker') {
+            if($this->Auth->user('role') == 'ServiceProvider' || $this->Auth->user('role') == 'ServiceSeeker'){
                 $this->redirect(
                     array(
-                        'admin' => false,
-                        'controller' => $this->request->params['controller'],
-                        'action' => (str_replace('admin_', '', $this->params['action']))
+                        'admin'=>false,
+                        'controller'=> $this->request->params['controller'],
+                        'action'=>(str_replace('admin_','',$this->params['action']))
                     )
                 );
             }
 
-        } elseif (empty($this->request->params['admin'])) {
+        }elseif(empty($this->request->params['admin'])){
 
             $menuItems = $this->_getMenu();
 
@@ -152,64 +142,42 @@ class AppController extends Controller
             $getSearchjob = $this->Useful->getSearchjobSuggestionList();
             $settings = $this->_getSettings();
             $getPrivacyPolicy = $this->_getPrivacyPolicy();
-            $this->set(compact('menuItems', 'getPlace', 'getSearchjob', 'settings', 'getPrivacyPolicy'));
+            $this->set(compact('menuItems','getPlace','getSearchjob','settings','getPrivacyPolicy'));
         }
 
 
     }
-
     //get privacy policy
-    private function _getPrivacyPolicy()
-    {
+    private function _getPrivacyPolicy(){
         $this->loadModel('ContentPage');
         $getContents = $this->ContentPage->query("select title,slug from content_pages as ContentPage where id=8 and is_active=1");
 
         return $getContents;
     }
-
     //get menu navigation
-    private function _getMenu()
-    {
+    private function _getMenu(){
         $this->loadModel('ContentPages');
         $getAbout = $this->ContentPages->query("select title,slug from content_pages as ContentPage where id=1");
         $getContents = $this->ContentPages->query("select title,slug from content_pages as ContentPage where id!=1 and is_active=1");
         $data = array();
-        $i = 0;
-        foreach ($getContents as $content_page):
+        $i=0;
+        foreach($getContents as $content_page):
 
             $data['Contents'][$i]['slug'] = $content_page['ContentPage']['slug'];
             $data['Contents'][$i]['title'] = $content_page['ContentPage']['title'];
-            $data['Contents'][$i]['url'] = SITE_URL . 'contents/' . $content_page['ContentPage']['slug'];
+            $data['Contents'][$i]['url'] = SITE_URL.'contents/'.$content_page['ContentPage']['slug'];
             $i++;
         endforeach;
-        $data['About'] = array(
-            'title' => $getAbout[0]['ContentPage']['title'],
-            'url' => SITE_URL . 'contents/' . $getAbout[0]['ContentPage']['slug']
-        );
+        $data['About'] = array('title'=>$getAbout[0]['ContentPage']['title'],'url'=>SITE_URL.'contents/'.$getAbout[0]['ContentPage']['slug']);
 
         return $data;
     }
 
-    private function _getSettings()
-    {
+    private function _getSettings(){
         $this->loadModel('PaypalSetting');
         $getSetting = $this->PaypalSetting->findById(1);;
-
         return $getSetting;
     }
-    /*public function afterFilter() {
-        //debug($this->Auth->user('role'));die;
-            if($this->Auth->user('role') == 'admin'){
-                debug($this->Auth->user('role'));die;
-                    $this->Auth->loginRedirect = array('controller' => 'users', 'action' => 'index');
-            }else if($this->Auth->user('role') == 'ServiceSeeker'){
-                //unset($this->Auth->loginRedirect);
-                    $this->Auth->loginRedirect = array('controller' => 'users', 'action' => 'seeker_index');
-                    //debug($this->Auth->loginRedirect);die;
-            }else if($this->Auth->user('role') == 'ServiceProvider '){
-                debug($this->Auth->user('role'));die;
-                    $this->Auth->loginRedirect = array('controller' => 'users', 'action' => 'provider_index');
-            }
-        }*/
+
 
 }
