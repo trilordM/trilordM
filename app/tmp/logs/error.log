@@ -105,3 +105,13 @@ Stack Trace:
 #3 /srv/Projects/PHP/trilord/lib/Cake/Core/App.php(902): App::_checkFatalError()
 #4 [internal function]: App::shutdown()
 #5 {main}
+2015-03-16 14:02:35 Error: Fatal Error (4): syntax error, unexpected '']['' (T_CONSTANT_ENCAPSED_STRING), expecting ']' in [/srv/Projects/PHP/trilord/app/View/Elements/Sections/menu.ctp, line 18]
+2015-03-16 14:02:35 Error: [FatalErrorException] syntax error, unexpected '']['' (T_CONSTANT_ENCAPSED_STRING), expecting ']'
+Request URL: /trilord/provider/600
+Stack Trace:
+#0 /srv/Projects/PHP/trilord/lib/Cake/Error/ErrorHandler.php(203): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/srv/Projects/P...', 18)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/srv/Projects/P...', 18, Array)
+#2 /srv/Projects/PHP/trilord/lib/Cake/Core/App.php(929): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/srv/Projects/P...', 18, Array)
+#3 /srv/Projects/PHP/trilord/lib/Cake/Core/App.php(902): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}

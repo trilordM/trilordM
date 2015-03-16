@@ -164,6 +164,7 @@ class FaqsController extends AppController
 										 status = 1 and role = 'ServiceProvider' and created_date between  (CURDATE()- INTERVAL 30 DAY) and CURDATE()");
         $title_for_layout = 'FAQs';
         $hideSearchBar = false;
-        $this->set(compact('type', 'user_stats', 'title_for_layout', 'hideSearchBar'));
+        $faq = true;
+        $this->set(compact('faq', 'type', 'user_stats', 'title_for_layout', 'hideSearchBar'));
     }
 }

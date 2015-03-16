@@ -151,7 +151,8 @@ class PagesController extends AppController
         //debug($testimonial);die;
 
         $frontPage = true;
-        $this->set(compact('frontPage', 'service_packages', 'searchplace', 'searchjob', 'salary', 'user_stats',
+        $home = true;
+        $this->set(compact('home','frontPage', 'service_packages', 'searchplace', 'searchjob', 'salary', 'user_stats',
             'getSearchplace', 'getSearchjob', 'getPlace', 'placeDistrict', 'job'));
         try {
             $this->render(implode('/', $path));
@@ -229,7 +230,8 @@ class PagesController extends AppController
 
         $getSearchjob = $this->Useful->getSearchjobSuggestionList();
         $getPlace = $this->Useful->getPlaceSuggestionList();
-        $this->set(compact('user', 'searchplace', 'searchJobTitle', 'getSearchjob', 'getPlace'));
+        $search_market = true;
+        $this->set(compact('search_market', 'user', 'searchplace', 'searchJobTitle', 'getSearchjob', 'getPlace'));
 
 
     }
@@ -319,7 +321,8 @@ class PagesController extends AppController
     public function contact()
     {
         $hideSearchBar = true;
-        $this->set(compact('hideSearchBar'));
+        $contact = true;
+        $this->set(compact('contact', 'hideSearchBar'));
 
     }
 

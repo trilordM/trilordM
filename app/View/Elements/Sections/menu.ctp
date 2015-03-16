@@ -13,15 +13,15 @@
             <button><i class="fa fa-bars"></i></button>
 
             <ul class="primary-nav list-unstyled">
-                <li><?php echo $this->html->link('HOME',array('controller' => 'pages', 'action' => 'display', 'home'));?></li>
-                <li>
-                    <?php echo $this->html->link($menuItems['About']['title'],$menuItems['About']['url']);?>
+                <li class= " <?php if (isset($home)) echo 'bg-color'; ?>" ><?php echo $this->html->link('HOME',array('controller' => 'pages', 'action' => 'display', 'home'));?></li>
+                <li class= " <?php if (isset($about)) echo 'bg-color'; ?>" >
+                    <?php echo $this->html->link('About', $menuItems['About']['url']);?>
                 </li>
-                <li><?php echo $this->html->link('Search Market', array('controller'=>'pages', 'action' => 'search_marketplace'));?></li>
-                <li><?php echo $this->html->link('Career', array('controller'=>'careers', 'action' => 'career'));?></li>
-                <li><?php echo $this->html->link('Contact Us', array('controller'=>'pages', 'action' => 'contact'));?></li>
+                <li class= " <?php if (isset($search_market)) echo 'bg-color'; ?>" ><?php echo $this->html->link('Search Market', array('controller'=>'pages', 'action' => 'search_marketplace'));?></li>
+                <li class= " <?php if (isset($career)) echo 'bg-color'; ?>" ><?php echo $this->html->link('Career', array('controller'=>'careers', 'action' => 'career'));?></li>
+                <li class= " <?php if (isset($contact)) echo 'bg-color'; ?>" ><?php echo $this->html->link('Contact Us', array('controller'=>'pages', 'action' => 'contact'));?></li>
 
-                <li><a href="javascript:void(0)">FAQ<i class="fa fa-angle-down"></i></a>
+                <li class= "bg-color <?php if (!isset($faq)) echo 'faq'; ?>" ><a href="javascript:void(0)">FAQ<i class="fa fa-angle-down"></i></a>
                     <ul class="sub-menu">
                         <li><?php echo $this->html->link("Service Provider", array('controller'=>'faqs', 'action' => 'view/provider'));?></li>
                         <li><?php echo $this->html->link("Customer", array('controller'=>'faqs', 'action' => 'view/customer'));?></li>

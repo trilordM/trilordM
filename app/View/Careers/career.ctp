@@ -29,7 +29,11 @@
                     </div> <!-- end row -->
                     <?php }
                     else{
-                        echo 'Unfortunately there are no job vacancies or job openings available.Please be update with us.';
+                        echo 'Unfortunately there are no job vacancies or job openings available.Please be update with us.
+                          
+                            At Trilord, we are always looking for talented, creative, flexible and hard-working people to join our team. To find out more, please call us at Toll Free: 1660-01-13579, or email us at :email@trilordmarket.com';
+                         
+
                     }?>
 
                 <div class="spacer-1">&nbsp;</div>

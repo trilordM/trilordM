@@ -2,6 +2,22 @@
 App::uses('AppController', 'Controller');
 App::uses('CakeEmail', 'Network/Email');
 App::uses('UserRepository', 'Repository/Impl');
+App::import(
+    'Vendor',
+    'aUniqueIdentifier',
+    array('file' => 'facebook' . DS . 'php-sdk-v4' . DS . 'autoload.php')
+);
+
+use Facebook\Entities\AccessToken;
+
+use Facebook\FacebookSession;
+use Facebook\FacebookSDKException;
+use Facebook\FacebookRedirectLoginHelper;
+use Facebook\FacebookRequestException;
+use Facebook\FacebookAuthorizationException;
+use Facebook\GraphObject;
+use Facebook\FacebookResponse;
+use Facebook\FacebookRequest;
 
 /**
  * Users Controller
@@ -1570,7 +1586,8 @@ left join districts D on D.id=P.district_id
             $rate = addslashes($this->request->data['rate']);
 
             $this->User->query("insert into ratings (user_id,seeker_id,request_id,rating) values('" . $providerId . "','" . $seekerId . "','" . $request_id . "','" . $rate . "')");
-    */      $providerId = addslashes($this->request->data['provider_id']);
+    */
+            $providerId = addslashes($this->request->data['provider_id']);
             $ratingCount = $this->Useful->getProviderRating($providerId);
 
             echo json_encode($ratingCount);
@@ -3297,5 +3314,65 @@ left join districts D on D.id=P.district_id
 
         return $user_card_id;
     }
+
+    public function facebook()
+    {
+
+        FacebookSession::setDefaultApplication('462625907218760', '9378f46504ce84d5b688e804872b9d30');
+        $helper = new FacebookRedirectLoginHelper(SITE_URL . 'users/facebook');
+
+
+        try {
+
+            $session = $helper->getSessionFromRedirect();
+            //debug($session);
+
+
+        } catch (FacebookRequestException $ex) {
+
+            // When Facebook returns an error
+        } catch (Exception $ex) {
+            // When validation fails or other local issues
+        }
+        if (isset($session)) {
+            $request = new FacebookRequest($session, 'GET', '/me');
+            $response = $request->execute();
+            $graphObject = $response->getGraphObject();
+            $fbid = $graphObject->getProperty('id');
+            $fbname = $graphObject->getProperty('name');
+            $fbemail = $graphObject->getProperty('email');
+
+            $get_user_count = $this->User->find('first', array('conditions' => array('User.fb_id' => $fbid)));
+            if (count($get_user_count) == 0) {
+                $data = array(
+                    'name' => $fbname,
+                    'email' => $fbemail,
+                    'fb_id' => $fbid,
+                    'role' => 'ServiceSeeker'
+                );
+
+                if ($this->User->save($data)) {
+
+                    $u = $this->User->read();
+                    $this->Auth->login($u['User']);
+                    $this->redirect(array('controller' => 'pages', 'action' => 'display'));
+                }
+            } else {
+
+
+                $a = $this->User->find('first', array('conditions' => array('User.fb_id' => $fbid)));
+                $this->Auth->login($a['User']);
+                $this->redirect(array('controller' => 'pages', 'action' => 'display'));
+            }
+
+        } else {
+            $loginUrl = $helper->getLoginUrl();
+
+            header("location:" . $loginUrl);
+            exit;
+
+        }
+    }
+
 
 }

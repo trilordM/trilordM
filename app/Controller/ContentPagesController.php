@@ -60,7 +60,8 @@ class ContentPagesController extends AppController
 
         $title_for_layout = $contentPage['ContentPage']['title'];
         $hideSearchBar = true;
-        $this->set(compact('contentPage', 'title_for_layout', 'user_stats', 'hideSearchBar'));
+        $about = true;
+        $this->set(compact('about', 'contentPage', 'title_for_layout', 'user_stats', 'hideSearchBar'));
     }
 
 

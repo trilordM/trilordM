@@ -113,7 +113,7 @@ CakePlugin::loadAll();
 /**
  *
  */
-define('SITE_URL','http://'.$_SERVER['HTTP_HOST'].'/');
+define('SITE_URL','http://'.$_SERVER['HTTP_HOST'].'/trilord/');
 define('USDTONRS','95');
 define('STATUS_HISTORY',serialize(array('0'=>'Old','1'=>'New')));
 

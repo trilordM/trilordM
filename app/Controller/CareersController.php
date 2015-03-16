@@ -129,7 +129,8 @@ class CareersController extends AppController
             array('conditions' => array('is_active' => '1', 'valid_till >=' => date('Y-m-d'))));
         //debug($vacancy);die;
         $hideSearchBar = true;
-        $this->set(compact('vacancy', 'hideSearchBar'));
+        $career = true;
+        $this->set(compact('career', 'vacancy', 'hideSearchBar'));
     }
 
 

@@ -22,6 +22,7 @@
         echo $this->Html->css('jquery.tokenize');
         echo $this->Html->css('magnific-popup');
   		echo $this->Html->css('globo/style');
+  		echo $this->Html->css('rating/rating');
         //<!-- Jquery CSS -->
         echo $this->Html->css('jquery-ui.min');
 

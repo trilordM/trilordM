@@ -3413,14 +3413,16 @@ body {
 }
 
 a {
-    color: #fff;
+    color: #428bca;
     text-decoration: none;
 }
 
 a:hover, a:focus {
-    color: #fdc600;
+    color: #2a6496;
     transition: all 0.3s ease 0s;
+    text-decoration: underline;
 }
+
 
 a:focus {
     outline: 0 none;
@@ -3998,20 +4000,10 @@ button {
     position: relative;
     width: 100%;
 }
+/* Header-Search-Bar */
 
-/*.header-search .header-search-bar {
-    background-color: rgba(78, 17, 17, 1);
-    left: 20%;
-    padding: 15px 0;
-    position: absolute;
-    top: 150px;
-    width: 63%;
-    z-index: 999;
-}*/
 .header-search .header-search-bar {
     background-color: rgba(78, 17, 17, 0);
-    /* border-radius: 15px;*/
-    /*left: 20%;*/
     padding: 8px 0;
     position: absolute;
     top: 150px;
@@ -4035,6 +4027,26 @@ button {
     position: absolute;
     top: 55px;
     width: 100%;
+}
+div.Tokenize ul.TokensContainer li.TokenSearch {
+    height: 75%;
+    margin: 5px;
+}
+
+div.Tokenize ul.TokensContainer li.TokenSearch input {
+    height: 100%;
+}
+div.Tokenize ul.TokensContainer li.TokenSearch input {
+    font-size: 16px;
+}
+div.Tokenize ul.TokensContainer li.TokenSearch {
+    float: left;
+    height: 80%;
+    margin: 5px 0 0 5px;
+}
+
+div.Tokenize ul.TokensContainer li.Token{
+    margin: 10px 0 0 5px;
 }
 
 @media (max-width: 768px) {
@@ -5711,7 +5723,7 @@ button {
     }
 }
 
-.pagination {
+/*.pagination {
     list-style: outside none none;
     margin-top: 10px;
     padding: 0;
@@ -5743,7 +5755,7 @@ button {
     position: relative;
     text-align: center;
     width: 69%;
-}
+}*/
 
 .product-details {
     position: relative;
@@ -9189,7 +9201,7 @@ button {
 .search-market-list {
     margin-top: 10%;
 }
-#category-book .single-product a {
+#category-book .single-product .btn{
     color: #fff;
     font-weight: 700;
 }
