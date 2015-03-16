@@ -61,6 +61,8 @@ Router::connect('/faq_provider', array('controller' => 'faqs', 'action' => 'view
 Router::connect('/faq_customer', array('controller' => 'faqs', 'action' => 'view', 'customer'));
 Router::connect('/forgot_password_page', array('controller' => 'users', 'action' => 'forgot_password_page'));
 
+Router::connect('/facebook_login', array('controller' => 'users', 'action' => 'facebook_login'));
+
 Router::parseExtensions('pdf');
 /**
  * ...and connect the rest of 'Pages' controller's URLs.

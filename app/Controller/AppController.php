@@ -124,7 +124,7 @@ class AppController extends Controller
     public function beforeFilter()
     {
 
-        $this->Auth->allow('index', 'view', 'search_marketplace', 'provider', 'contact', 'provider_register', 'career');
+        $this->Auth->allow('index', 'view', 'search_marketplace', 'provider', 'contact', 'provider_register', 'career','facebook_login');
         parent::beforeFilter();
 
         $this->layout = 'default';

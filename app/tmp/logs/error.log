@@ -115,3 +115,13 @@ Stack Trace:
 #3 /srv/Projects/PHP/trilord/lib/Cake/Core/App.php(902): App::_checkFatalError()
 #4 [internal function]: App::shutdown()
 #5 {main}
+2015-03-16 16:12:43 Error: Fatal Error (1): Class 'Facebook\FacebookSession' not found in [/srv/Projects/PHP/trilord/app/Controller/UsersController.php, line 3321]
+2015-03-16 16:12:43 Error: [FatalErrorException] Class 'Facebook\FacebookSession' not found
+Request URL: /trilord/facebook_login
+Stack Trace:
+#0 /srv/Projects/PHP/trilord/lib/Cake/Error/ErrorHandler.php(203): ErrorHandler::handleFatalError(1, 'Class 'Facebook...', '/srv/Projects/P...', 3321)
+#1 [internal function]: ErrorHandler::handleError(1, 'Class 'Facebook...', '/srv/Projects/P...', 3321, Array)
+#2 /srv/Projects/PHP/trilord/lib/Cake/Core/App.php(929): call_user_func('ErrorHandler::h...', 1, 'Class 'Facebook...', '/srv/Projects/P...', 3321, Array)
+#3 /srv/Projects/PHP/trilord/lib/Cake/Core/App.php(902): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}

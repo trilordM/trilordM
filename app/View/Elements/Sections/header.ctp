@@ -55,7 +55,7 @@
                         </li>
                     </ul>
                   <?php else:?>
-                    <a class="btn btn-facebook">
+                    <a class="btn btn-facebook" href="<?php echo SITE_URL . 'facebook_login' ?>">
                         <i class="fa fa-facebook fa-lg"></i> Sign in
                     </a>
                     <div class="btn-group">
@@ -63,9 +63,9 @@
                         Register <i class="fa fa-angle-down"></i>
                       </button>
                       <ul class="dropdown-menu" role="menu">
-                         <li><a href="<?php echo $base_url.'seeker_register'?>">Service Seeker</a></li>
-                         <!--<li><a href="<?php //echo $base_url.'provider_register?type=company'?>">Service Provider (Company)</a></li>-->
-                         <!--<li><a href="<?php echo $base_url.'provider_register?type=individual'?>">Service Provider (Individual)</a></li>-->
+                         <li><a href="<?php echo SITE_URL .'seeker_register'?>">Service Seeker</a></li>
+                         <!--<li><a href="<?php //echo SITE_URL.'provider_register?type=company'?>">Service Provider (Company)</a></li>-->
+                         <!--<li><a href="<?php echo SITE_URL .'provider_register?type=individual'?>">Service Provider (Individual)</a></li>-->
 
                       </ul>
                     </div>

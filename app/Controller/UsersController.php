@@ -3315,19 +3315,16 @@ left join districts D on D.id=P.district_id
         return $user_card_id;
     }
 
-    public function facebook()
+    public function facebook_login()
     {
 
         FacebookSession::setDefaultApplication('462625907218760', '9378f46504ce84d5b688e804872b9d30');
-        $helper = new FacebookRedirectLoginHelper(SITE_URL . 'users/facebook');
+        $helper = new FacebookRedirectLoginHelper(SITE_URL . 'users/facebook_login');
 
 
         try {
 
             $session = $helper->getSessionFromRedirect();
-            //debug($session);
-
-
         } catch (FacebookRequestException $ex) {
 
             // When Facebook returns an error
@@ -3358,7 +3355,6 @@ left join districts D on D.id=P.district_id
                     $this->redirect(array('controller' => 'pages', 'action' => 'display'));
                 }
             } else {
-
 
                 $a = $this->User->find('first', array('conditions' => array('User.fb_id' => $fbid)));
                 $this->Auth->login($a['User']);
